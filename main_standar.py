@@ -13,7 +13,10 @@ incentive = 1.8
 filepath = file_dir + filename + ".csv"
 
 print(f"Opening {filepath}")
-initial_population = utils_file.import_csv(filepath)
+
+population_array = utils_file.import_csv(filepath)
+initial_population = np.array(population_array, dtype=int)
+
 matrix_list = [initial_population]
 
 for step in range(10):
