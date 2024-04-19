@@ -41,6 +41,18 @@ def compute_payoff(array, b: float):
     return narray.sum() if individual == 1 else narray.sum() * b
 
 
+def compute_payoff_with_rule(block: list, rule: list):
+    nblock = np.array(block)
+
+    if nblock.shape != (3, 3):
+        raise ValueError("array must be of shape (3,3)")
+    else:
+        # asumir siempre que el individuo esta en (1, 1) para matriz de orden 3x3
+        individual = nblock[1, 1]
+
+    return sum([rule[individual][neighbour] for neighbour in nblock.ravel()])
+
+
 def get_highest_element_idx(array):
     array = np.array(array)
     return np.unravel_index(array.argmax(), array.shape)
