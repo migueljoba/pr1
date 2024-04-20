@@ -15,6 +15,44 @@ regular_array_test = [
 np_regular_array = np.array(regular_array_test)
 
 
+def test_get_neighbours_idx():
+    i = utils.get_neighbours_idx(regular_array_test, 0, 0)
+    assert i[0] == [-1, -1, -1, 0, 0, 0, 1, 1, 1]
+    assert i[1] == [-1, 0, 1, -1, 0, 1, -1, 0, 1]
+
+    i = utils.get_neighbours_idx(regular_array_test, 0, 6)
+    assert i[0] == [-1, -1, -1, 0, 0, 0, 1, 1, 1]
+    assert i[1] == [5, 6, 0, 5, 6, 0, 5, 6, 0]
+
+    i = utils.get_neighbours_idx(regular_array_test, 6, 0)
+    assert i[0] == [5, 5, 5, 6, 6, 6, 0, 0, 0]
+    assert i[1] == [-1, 0, 1, -1, 0, 1, -1, 0, 1]
+
+    i = utils.get_neighbours_idx(regular_array_test, 6, 6)
+    assert i[0] == [5, 5, 5, 6, 6, 6, 0, 0, 0]
+    assert i[1] == [5, 6, 0, 5, 6, 0, 5, 6, 0]
+
+    i = utils.get_neighbours_idx(regular_array_test, 1, 1)
+    assert i[0] == [0, 0, 0, 1, 1, 1, 2, 2, 2]
+    assert i[1] == [0, 1, 2, 0, 1, 2, 0, 1, 2]
+
+    i = utils.get_neighbours_idx(regular_array_test, 2, 2)
+    assert i[0] == [1, 1, 1, 2, 2, 2, 3, 3, 3]
+    assert i[1] == [1, 2, 3, 1, 2, 3, 1, 2, 3]
+
+    i = utils.get_neighbours_idx(regular_array_test, 3, 3)
+    assert i[0] == [2, 2, 2, 3, 3, 3, 4, 4, 4]
+    assert i[1] == [2, 3, 4, 2, 3, 4, 2, 3, 4]
+
+    i = utils.get_neighbours_idx(regular_array_test, 4, 4)
+    assert i[0] == [3, 3, 3, 4, 4, 4, 5, 5, 5]
+    assert i[1] == [3, 4, 5, 3, 4, 5, 3, 4, 5]
+
+    i = utils.get_neighbours_idx(regular_array_test, 5, 5)
+    assert i[0] == [4, 4, 4, 5, 5, 5, 6, 6, 6]
+    assert i[1] == [4, 5, 6, 4, 5, 6, 4, 5, 6]
+
+
 def test_get_neighbours():
     n0 = utils.get_neighbours(np_regular_array, 0, 0)
     assert n0 == [[48, 42, 43], [6, 0, 1], [13, 7, 8]]

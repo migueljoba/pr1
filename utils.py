@@ -12,22 +12,28 @@ def generate_weight_array(population, b: float):
     return weight_array
 
 
+def get_neighbours_idx_i(i: int, cols):
+    return [i - 1, i - 1, i - 1, i, i, i, (i + 1) % cols, (i + 1) % cols, (i + 1) % cols]
+
+
+def get_neighbours_idx_j(j: int, cols):
+    return [j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols]
+
+
 def get_neighbours_idx(arrange: list = [], i: int = None, j: int = None) -> list:
     cols = len(arrange[0])
-    n0 = [[i - 1, j - 1], [i - 1, j], [i - 1, (j + 1) % cols]]
-    n1 = [[i, j - 1], [i, j], [i, (j + 1) % cols]]
-    n2 = [[(i + 1) % cols, j - 1], [(i + 1) % cols, j], [(i + 1) % cols, (j + 1) % cols]]
-
-    return [n0, n1, n2]
+    idx_row = get_neighbours_idx_i(i, cols)
+    idx_col = get_neighbours_idx_j(j, cols)
+    return [idx_row, idx_col]
 
 
 def get_neighbours(arrange: list = [], i: int = None, j: int = None) -> list:
     cols = len(arrange[0])
-    n0 = [arrange[i - 1][j - 1], arrange[i - 1][j], arrange[i - 1][(j + 1) % cols]]
-    n1 = [arrange[i][j - 1], arrange[i][j], arrange[i][(j + 1) % cols]]
-    n2 = [arrange[(i + 1) % cols][j - 1], arrange[(i + 1) % cols][j], arrange[(i + 1) % cols][(j + 1) % cols]]
+    idx_i = get_neighbours_idx_i(i, cols)
+    idx_j = get_neighbours_idx_j(j, cols)
 
-    return [n0, n1, n2]
+    n = np.array(arrange)[idx_i, idx_j].reshape(3, 3)
+    return n.tolist()  # TODO retornar ndarray
 
 
 def compute_payoff(array, b: float):
