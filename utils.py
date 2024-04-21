@@ -39,10 +39,7 @@ def get_neighbours_idx(arrange: list = [], i: int = None, j: int = None) -> list
 
 
 def get_neighbours(arrange: list = [], i: int = None, j: int = None) -> list:
-    cols = len(arrange[0])
-    idx_i = get_neighbours_idx_i(i, cols)
-    idx_j = get_neighbours_idx_j(j, cols)
-
+    idx_i, idx_j = get_neighbours_idx(arrange, i, j)
     n = np.array(arrange)[idx_i, idx_j].reshape(3, 3)
     return n.tolist()  # TODO retornar ndarray
 
