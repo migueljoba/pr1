@@ -124,13 +124,13 @@ def test_compute_payoff_with_rule():
 
     rule = utils.Rule()
     rule.b = 1.5
-    rule.matrix_rule = [
+    rule.matrix = [
         [0, rule.b],
         [0, 1]
     ]
 
     arr1 = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
-    r = utils.compute_payoff_with_rule(arr1, rule.matrix_rule)
+    r = utils.compute_payoff_with_rule(arr1, rule)
     assert r == 10.5
 
 
