@@ -120,21 +120,17 @@ def test_compute_payoff_when():
     assert p == 1
 
 
-def test_compute_payoff_borrar():
-    arr0 = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
-    p = utils.compute_payoff(arr0, 1.5)
-    assert p == 10.5
-
-
 def test_compute_payoff_with_rule():
-    b = 1.5
-    rule = [
-        [0, b],
+
+    rule = utils.Rule()
+    rule.b = 1.5
+    rule.matrix_rule = [
+        [0, rule.b],
         [0, 1]
     ]
 
     arr1 = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
-    r = utils.compute_payoff_with_rule(arr1, rule)
+    r = utils.compute_payoff_with_rule(arr1, rule.matrix_rule)
     assert r == 10.5
 
 

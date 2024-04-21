@@ -1,13 +1,19 @@
 import numpy as np
 
 
-def generate_weight_array(population, b: float):
+class Rule:
+    def __init__(self):
+        self.matrix = None
+        self.b = None
+
+
+def generate_weight_array(population, rule: Rule):
     weight_array = np.empty(population.shape, dtype=float)
 
     for idx_i, row in enumerate(population):
         for idx_j, col in enumerate(row):
             neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
-            weight_array[idx_i, idx_j] = compute_payoff(neighbours, b)
+            weight_array[idx_i, idx_j] = compute_payoff_with_rule(neighbours, rule)
 
     return weight_array
 
@@ -47,7 +53,7 @@ def compute_payoff(array, b: float):
     return narray.sum() if individual == 1 else narray.sum() * b
 
 
-def compute_payoff_with_rule(block: list, rule: list):
+def compute_payoff_with_rule(block: list, rule: Rule):
     nblock = np.array(block)
 
     if nblock.shape != (3, 3):
@@ -56,7 +62,7 @@ def compute_payoff_with_rule(block: list, rule: list):
         # asumir siempre que el individuo esta en (1, 1) para matriz de orden 3x3
         individual = nblock[1, 1]
 
-    return sum([rule[individual][neighbour] for neighbour in nblock.ravel()])
+    return sum([rule.matrix[individual][neighbour] for neighbour in nblock.ravel()])
 
 
 def get_highest_element_idx(array):

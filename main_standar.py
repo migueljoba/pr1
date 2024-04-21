@@ -6,8 +6,13 @@ import utils_file
 import numpy as np
 
 file_dir = "./data_source/"
-filename = "rotator"
-incentive = 1.8
+filename = "grower"
+rule = utils.Rule()
+rule.b = 1.9
+rule.matrix = [
+    [0, rule.b],
+    [0, 1]
+]
 # rotator con b = 1.67 o mayor
 
 filepath = file_dir + filename + ".csv"
@@ -25,7 +30,7 @@ for step in range(10):
     current_step = np.zeros(initial_population.shape, dtype=int)
     previous_step = matrix_list[-1]
 
-    payoff_array = utils.generate_weight_array(previous_step, incentive)
+    payoff_array = utils.generate_weight_array(previous_step, rule)
 
     for idx_i, row in enumerate(payoff_array):
         for idx_j, col in enumerate(row):
@@ -39,4 +44,4 @@ for step in range(10):
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")
     time.sleep(1)
-    utils_plot.plot_binary_array(m, step=idx, b=incentive, file_prefix=filename)
+    utils_plot.plot_binary_array(m, step=idx, b=rule.b, file_prefix=filename)
