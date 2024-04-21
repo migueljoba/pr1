@@ -10,10 +10,9 @@ class Rule:
 def generate_weight_array(population, rule: Rule):
     weight_array = np.empty(population.shape, dtype=float)
 
-    for idx_i, row in enumerate(population):
-        for idx_j, col in enumerate(row):
-            neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
-            weight_array[idx_i, idx_j] = compute_payoff_with_rule(neighbours, rule)
+    for idx_i, idx_j in np.ndindex(population.shape):
+        neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
+        weight_array[idx_i, idx_j] = compute_payoff_with_rule(neighbours, rule)
 
     return weight_array
 

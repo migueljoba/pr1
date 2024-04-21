@@ -1,39 +1,32 @@
 import time
 
 import numpy as np
+from numpy.random import RandomState
 
 import utils
-import utils_file
 import utils_plot
 
-file_dir = "./data_source/"
-filename = "grower"
 rule = utils.Rule()
-rule.b = 1.9
+rule.b = 1.8
 rule.matrix = [
     [0, rule.b],
     [0, 1]
 ]
-# rotator con b = 1.67 o mayor
 
-filepath = file_dir + filename + ".csv"
+rand_np = RandomState(1234567)
+rand_initial_population = rand_np.randint(2, size=(100, 100), dtype=int)
 
-print(f"Opening {filepath}")
-
-population_array = utils_file.import_csv(filepath)
-initial_population = np.array(population_array, dtype=int)
-
-matrix_list = [initial_population]
+matrix_list = [rand_initial_population]
 
 for step in range(10):
     print(f"Step {step}")
 
-    current_step = np.zeros(initial_population.shape, dtype=int)
+    current_step = np.zeros(rand_initial_population.shape, dtype=int)
     previous_step = matrix_list[-1]
 
     payoff_array = utils.generate_weight_array(previous_step, rule)
 
-    for idx_i, idx_j in np.ndindex(payoff_array.shape):
+    for idx_i, idx_j in np.ndindex(rand_initial_population.shape):
         neighbours_payoff = utils.get_neighbours(payoff_array, idx_i, idx_j)
         winner_idx = utils.get_highest_element_idx(neighbours_payoff)
         neighbours = utils.get_neighbours(previous_step, idx_i, idx_j)
@@ -44,4 +37,4 @@ for step in range(10):
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")
     time.sleep(1)
-    utils_plot.plot_binary_array(m, step=idx, b=rule.b, file_prefix=filename)
+    utils_plot.plot_binary_array(m, step=idx, b=rule.b, file_prefix="rand")

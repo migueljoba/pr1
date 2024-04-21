@@ -4,7 +4,7 @@ from numpy.random import RandomState
 import utils
 
 rule0 = utils.Rule()
-rule0.b = 1.9
+rule0.b = 1.8
 rule0.matrix = [
     [0, rule0.b],
     [0, 1]
