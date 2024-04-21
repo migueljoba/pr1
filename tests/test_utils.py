@@ -12,6 +12,13 @@ regular_array_test = [
     [42, 43, 44, 45, 46, 47, 48]
 ]
 
+arrary_order_mn = [
+    [0, 1, 2, 3, 4, 5, 6],
+    [7, 8, 9, 10, 11, 12, 13],
+    [14, 15, 16, 17, 18, 19, 20],
+    [21, 22, 23, 24, 25, 26, 27]
+]
+
 np_regular_array = np.array(regular_array_test)
 
 
@@ -51,6 +58,12 @@ def test_get_neighbours_idx():
     i = utils.get_neighbours_idx(regular_array_test, 5, 5)
     assert i[0] == [4, 4, 4, 5, 5, 5, 6, 6, 6]
     assert i[1] == [4, 5, 6, 4, 5, 6, 4, 5, 6]
+
+
+def test_get_neighbours_when_order_mn():
+    i = utils.get_neighbours_idx(arrary_order_mn, 0, 6)
+    assert i[0] == [-1, -1, -1, 0, 0, 0, 1, 1, 1]
+    assert i[1] == [5, 6, 0, 5, 6, 0, 5, 6, 0]
 
 
 def test_get_neighbours():
@@ -121,7 +134,6 @@ def test_compute_payoff_when():
 
 
 def test_compute_payoff_with_rule():
-
     rule = utils.Rule()
     rule.b = 1.5
     rule.matrix = [

@@ -18,17 +18,22 @@ def generate_weight_array(population, rule: Rule):
     return weight_array
 
 
-def get_neighbours_idx_i(i: int, cols):
-    return [i - 1, i - 1, i - 1, i, i, i, (i + 1) % cols, (i + 1) % cols, (i + 1) % cols]
+def get_neighbours_idx_i(i: int, rows):
+    if rows < 3:
+        raise ValueError("Cols cannot be less than 3!")
+    return [i - 1, i - 1, i - 1, i, i, i, (i + 1) % rows, (i + 1) % rows, (i + 1) % rows]
 
 
 def get_neighbours_idx_j(j: int, cols):
+    if cols < 3:
+        raise ValueError("Rows cannot be less than 3!")
     return [j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols]
 
 
 def get_neighbours_idx(arrange: list = [], i: int = None, j: int = None) -> list:
+    rows = len(arrange)
     cols = len(arrange[0])
-    idx_row = get_neighbours_idx_i(i, cols)
+    idx_row = get_neighbours_idx_i(i, rows)
     idx_col = get_neighbours_idx_j(j, cols)
     return [idx_row, idx_col]
 
