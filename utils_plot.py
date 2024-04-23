@@ -1,39 +1,36 @@
 import matplotlib.pyplot as plt
-import matplotlib.colors
+import matplotlib.colors as colors
 import numpy as np
 
 
-def plot_binary_array(array, step=None, b=None, file_prefix=None):
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
+def plot_binary_array(array, step=None, b=None, file_prefix=None, grid_data=False):
+    color_defector = 'lightcoral'
+    color_cooperator = 'steelblue'
+    color_map = colors.ListedColormap([color_defector, color_cooperator])
 
-    # Major ticks every 20, minor ticks every 5
-    major_ticks = np.arange(0.5, 101, 5)
-    minor_ticks = np.arange(0.5, 101, 1)
+    fig, ax = plt.subplots(dpi=700)
+    ax.imshow(array, cmap=color_map)
 
-    ax.set_xticks(major_ticks)
-    ax.set_xticks(minor_ticks, minor=True)
+    total_rows, total_cols = array.shape
+    ax.set_xticks(np.arange(total_cols))
+    ax.set_yticks(np.arange(total_rows))
 
-    ax.set_yticks(major_ticks)
-    ax.set_yticks(minor_ticks, minor=True)
-
-    ax.set_yticklabels([])
-    ax.set_xticklabels([])
-
-    # Or if you want different settings for the grids:
-    ax.grid(which='minor', alpha=1, color='black')
-    ax.grid(which='major', alpha=1)
-
-    cmap = matplotlib.colors.ListedColormap(['red', 'blue'])
-    plt.imshow(array, cmap=cmap)
-    plt.grid(True, color='#000', linestyle='-', linewidth=1)
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
     plt.title(f"Step: {step} - b: {b}")
-    # plt.show()
+
+    if grid_data:
+        for i, j in np.ndindex(array.shape):
+            ax.text(j, i, array[i, j],
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    color='white')
 
     # TODO directorio de salida debe ser parametrizable
     if file_prefix is not None:
         filename = f"images/{file_prefix}-{b}-{step}.png"
     else:
         filename = f"images/{b}-{step}.png"
+
     plt.savefig(filename)
+    plt.close()
