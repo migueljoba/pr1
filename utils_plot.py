@@ -36,23 +36,11 @@ def plot_binary_array(array, step=None, b=None, file_prefix=None, grid_data=Fals
     plt.close()
 
 
-def plot_frecuency(collection: list, strategy: str = 'c', title: str = None):
-    data = []
-
+def plot_frecuency(data: list, title: str = None):
     plt.figure(1, dpi=800)
 
-    for col in collection:
-        values, counter = np.unique(col, return_counts=True)
-        if strategy == 'c':
-            group = counter[1] / 400  # TODO total de indiv. debe ser dinamico
-        else:
-            group = counter[1] / 400  # TODO total de indiv. debe ser dinamico
-
-        data.append(group)
-        print(group)
-
     x_min = 0
-    x_max = len(collection)
+    x_max = len(data)
     # x_max = 100
     y_min = 0
     y_max = 1

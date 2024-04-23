@@ -4,8 +4,19 @@ import utils_plot
 
 from numpy.random import RandomState
 
+
+def resume_frecuency_data(collection: list, strategy: str = "c"):
+    frecuency_data = []
+
+    for col in collection:
+        values, counter = np.unique(col, return_counts=True)
+        group = counter[1] / 400 if strategy == "c" else counter[0] / 400
+        frecuency_data.append(group)
+    return frecuency_data
+
+
 rule = utils.Rule()
-rule.b = 2.01
+rule.b = 1.13
 rule.matrix = [
     [0, rule.b],
     [0, 1]
@@ -29,8 +40,11 @@ for step in range(200):
 
     matrix_list.append(current_step)
 
+plot_data = resume_frecuency_data(matrix_list)
+[print(f"{idx},{val}") for idx, val in enumerate(plot_data)]
+
 plot_title = f"b: {rule.b}"
-plot = utils_plot.plot_frecuency(matrix_list, title=plot_title)
+plot = utils_plot.plot_frecuency(plot_data, title=plot_title)
 
 filename = f"images/freq-{rule.b}.png"
 plot.savefig(filename)
