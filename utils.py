@@ -55,6 +55,11 @@ def compute_payoff(array, b: float):
 
 
 def compute_payoff_with_rule(block: list, rule: Rule):
+    if rule.b is None:
+        raise ValueError("Rule must have b. None given.")
+    if rule.matrix is None:
+        raise ValueError("Rule must have matrix. None given.")
+
     nblock = np.array(block)
 
     if nblock.shape != (3, 3):
