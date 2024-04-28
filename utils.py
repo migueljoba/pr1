@@ -92,3 +92,22 @@ def resume_frequency_data(collection: list, strategy: int = 1):
         strategy_counter = counter[strategy] / population
         frequency_data.append(strategy_counter)
     return frequency_data
+
+
+def run(initial_population: np.ndarray, rule: Rule, generations: int):
+    matrix_list = [initial_population]
+
+    for gen in range(generations):
+        current_step = np.zeros(initial_population.shape, dtype=np.int8)
+        previous_step = matrix_list[-1]
+        payoff_array = generate_weight_array(previous_step, rule)
+
+        for idx_i, idx_j in np.ndindex(initial_population.shape):
+            neighbours_payoff = get_neighbours(payoff_array, idx_i, idx_j)
+            winner_idx = get_highest_element_idx(neighbours_payoff)
+            neighbours = get_neighbours(previous_step, idx_i, idx_j)
+            current_step[idx_i, idx_j] = neighbours[winner_idx[0]][winner_idx[1]]
+
+        matrix_list.append(current_step)
+
+    return matrix_list
