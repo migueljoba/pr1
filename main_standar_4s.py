@@ -58,5 +58,5 @@ for step in range(50):
 
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")
-    time.sleep(0.7)
-    utils_plot.plot_4_color_array(m, step=idx, b=rule.b, file_prefix=filename)
+    time.sleep(0.6)
+    utils_plot.plot_4s_array(m, step=idx, b=rule.b, file_prefix=filename, format="png")
