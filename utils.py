@@ -7,6 +7,14 @@ class Rule:
         self.b = None
 
 
+def default_random():
+    return np.random.RandomState(123456789)
+
+
+def random_population(elements: list, probability: list, size: tuple):
+    return default_random().choice(elements, p=probability, size=size)
+
+
 def generate_weight_array(population, rule: Rule):
     weight_array = np.empty(population.shape, dtype=float)
 
