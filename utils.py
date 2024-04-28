@@ -78,3 +78,14 @@ def get_highest_element_idx(array):
 
 def get_highest_element(array):
     return array[get_highest_element_idx(array)]
+
+
+def resume_frecuency_data(collection: list, strategy: int = 1):
+    frequency_data = []
+    rows, cols = collection[0].shape
+    population = rows * cols
+    for col in collection:
+        values, counter = np.unique(col, return_counts=True)
+        strategy_counter = counter[strategy] / population
+        frequency_data.append(strategy_counter)
+    return frequency_data
