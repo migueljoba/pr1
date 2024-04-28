@@ -39,11 +39,12 @@ def plot_binary_array(array, step=None, b=None, title: str = None, file_prefix=N
     plt.close()
 
 
-def plot_4_color_array(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False):
-    color_defector = 'red'
-    color_new_defector = 'yellow'
-    color_new_cooperator = 'green'
-    color_cooperator = 'blue'
+def plot_4s_array(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False, format="png",
+                  ticks: bool = False):
+    color_defector = 'lightcoral'
+    color_new_defector = 'gold'
+    color_new_cooperator = 'yellowgreen'
+    color_cooperator = 'steelblue'
 
     color_map = colors.ListedColormap([color_defector, color_new_defector, color_new_cooperator, color_cooperator])
 
@@ -51,10 +52,11 @@ def plot_4_color_array(array, step=None, b=None, title: str = None, file_prefix=
     ax.imshow(array, cmap=color_map)
 
     total_rows, total_cols = array.shape
-    ax.set_xticks(np.arange(total_cols))
-    ax.set_yticks(np.arange(total_rows))
 
-    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+    if ticks:
+        ax.set_xticks(np.arange(total_cols))
+        ax.set_yticks(np.arange(total_rows))
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
     if title is not None:
         plt.title(title)
@@ -70,11 +72,11 @@ def plot_4_color_array(array, step=None, b=None, title: str = None, file_prefix=
 
     # TODO directorio de salida debe ser parametrizable
     if file_prefix is not None:
-        filename = f"images/{file_prefix}-{b}-{step}.png"
+        filename = f"images/{file_prefix}-{b}-{step}.{format}"
     else:
-        filename = f"images/{b}-{step}.png"
+        filename = f"images/{b}-{step}.{format}"
 
-    plt.savefig(filename)
+    plt.savefig(filename, format=format)
     plt.close()
 
 
