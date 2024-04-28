@@ -1,6 +1,9 @@
 import unittest
-import utils
+
 import numpy as np
+from numpy.random import RandomState
+
+import utils
 
 regular_array_test = [
     [0, 1, 2, 3, 4, 5, 6],
@@ -144,6 +147,22 @@ def test_compute_payoff_with_rule():
     arr1 = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
     r = utils.compute_payoff_with_rule(arr1, rule)
     assert r == 10.5
+
+
+def test_resume_frequency_data():
+    collection = []
+    for rnd in range(10):
+        rand_np = RandomState(rnd)
+        rand_matrix = rand_np.choice([0, 1], p=[0.3, 0.7], size=(20, 20))
+        collection.append(rand_matrix)
+
+    # asserts strategy 0: defector
+    freq_data = utils.resume_frequency_data(collection, strategy=0)
+    assert freq_data == [0.3175, 0.2975, 0.3275, 0.32, 0.2525, 0.2875, 0.3, 0.3025, 0.295, 0.3]
+
+    # asserts strategy 1: cooperator
+    freq_data = utils.resume_frequency_data(collection, strategy=1)
+    assert freq_data == [0.6825, 0.7025, 0.6725, 0.68, 0.7475, 0.7125, 0.7, 0.6975, 0.705, 0.7]
 
 
 if __name__ == '__main__':

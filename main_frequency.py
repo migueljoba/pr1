@@ -32,11 +32,11 @@ for step in range(total_steps):
 
     matrix_list.append(current_step)
 
-plot_data = utils.resume_frecuency_data(matrix_list)
+plot_data = utils.resume_frequency_data(matrix_list)
 [print(f"{idx},{val}") for idx, val in enumerate(plot_data)]
 
 plot_title = f"b: {rule.b}"
-plot = utils_plot.plot_frecuency(plot_data, title=plot_title)
+plot = utils_plot.plot_frequency(plot_data, title=plot_title)
 
 filename = f"images/freq-{rule.b}.png"
 plot.savefig(filename)

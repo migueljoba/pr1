@@ -80,7 +80,10 @@ def get_highest_element(array):
     return array[get_highest_element_idx(array)]
 
 
-def resume_frecuency_data(collection: list, strategy: int = 1):
+def resume_frequency_data(collection: list, strategy: int = 1):
+    if strategy not in [0, 1]:
+        raise ValueError("Strategy must be 0 or 1.")
+
     frequency_data = []
     rows, cols = collection[0].shape
     population = rows * cols

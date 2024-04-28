@@ -80,7 +80,7 @@ def plot_4s_array(array, step=None, b=None, title: str = None, file_prefix=None,
     plt.close()
 
 
-def plot_frecuency(data: list, title: str = None):
+def plot_frequency(data: list, title: str = None):
     plt.figure(1, dpi=800)
 
     x_min = 0
