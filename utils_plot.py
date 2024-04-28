@@ -3,7 +3,8 @@ import matplotlib.colors as colors
 import numpy as np
 
 
-def plot_binary_array(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False):
+def plot_binary_array(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False,
+                      format: str = 'png'):
     color_defector = 'lightcoral'
     color_cooperator = 'steelblue'
     color_map = colors.ListedColormap([color_defector, color_cooperator])
@@ -31,11 +32,11 @@ def plot_binary_array(array, step=None, b=None, title: str = None, file_prefix=N
 
     # TODO directorio de salida debe ser parametrizable
     if file_prefix is not None:
-        filename = f"images/{file_prefix}-{b}-{step}.svg"
+        filename = f"images/{file_prefix}-{b}-{step}.{format}"
     else:
-        filename = f"images/{b}-{step}.svg"
+        filename = f"images/{b}-{step}.{format}"
 
-    plt.savefig(filename, format="svg")
+    plt.savefig(filename, format=format)
     plt.close()
 
 
