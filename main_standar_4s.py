@@ -6,8 +6,6 @@ import utils
 import utils_file
 import utils_plot
 
-file_dir = "./data_source/"
-filename = "kaleido"
 rule = utils.Rule()
 rule.b = 1.85
 rule.matrix = [
@@ -25,11 +23,10 @@ rule.transition = [
     [2, 1, 2, 1],
 ]
 
-filepath = file_dir + filename + ".csv"
+filename = "kaleido"
+print(f"Opening {filename}")
 
-print(f"Opening {filepath}")
-
-population_array = utils_file.import_csv(filepath)
+population_array = utils_file.import_csv(filename)
 initial_population = np.array(population_array, dtype=int)
 
 matrix_list = [initial_population]
