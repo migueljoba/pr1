@@ -5,6 +5,7 @@ class Rule:
     def __init__(self):
         self.matrix = None
         self.b = None
+        self.transition = None
 
 
 def default_random():

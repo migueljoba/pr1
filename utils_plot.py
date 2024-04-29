@@ -42,12 +42,13 @@ def plot_binary_array(array, step=None, b=None, title: str = None, file_prefix=N
 
 def plot_4s_array(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False, format="png",
                   ticks: bool = False):
+
     color_defector = 'lightcoral'
+    color_cooperator = 'steelblue'
     color_new_defector = 'gold'
     color_new_cooperator = 'yellowgreen'
-    color_cooperator = 'steelblue'
 
-    color_map = colors.ListedColormap([color_defector, color_new_defector, color_new_cooperator, color_cooperator])
+    color_map = colors.ListedColormap([color_defector, color_cooperator, color_new_defector, color_new_cooperator])
 
     fig, ax = plt.subplots(dpi=700)
     ax.imshow(array, cmap=color_map)
@@ -67,9 +68,10 @@ def plot_4s_array(array, step=None, b=None, title: str = None, file_prefix=None,
     if grid_data:
         for i, j in np.ndindex(array.shape):
             ax.text(j, i, array[i, j],
+                    fontsize=4,
                     horizontalalignment='center',
                     verticalalignment='center',
-                    color='white')
+                    color='black')
 
     # TODO directorio de salida debe ser parametrizable
     if file_prefix is not None:

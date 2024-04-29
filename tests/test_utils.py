@@ -27,7 +27,6 @@ np_regular_array = np.array(regular_array_test)
 
 def test_random_population():
     population = utils.random_population(elements=[0, 1], probability=[0.5, 0.5], size=(3, 10))
-    print(population)
     expected = [[1, 1, 1, 1, 0, 1, 1, 0, 1, 1], [1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 1, 0, 0, 1, 1, 0, 0, 1, 0]]
     np.testing.assert_array_equal(population, expected)
 
