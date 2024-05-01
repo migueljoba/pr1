@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from numpy.random import RandomState
 
 import utils
 from rule import Rule
@@ -13,7 +12,7 @@ rule = Rule()
 rule.b = 1.3
 rule.use_binary_rule()
 
-rand_np = RandomState(123456789)
+rand_np = utils.default_random()
 
 size = (20, 20)
 print_map_data = True

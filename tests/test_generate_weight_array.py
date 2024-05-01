@@ -1,8 +1,8 @@
 import numpy as np
-from numpy.random import RandomState
 
 import utils
 from rule import Rule
+
 rule0 = Rule()
 rule0.b = 1.8
 rule0.use_binary_rule()
@@ -41,7 +41,7 @@ def test_generate_weight_array_with_random_binary_population():
     Tests generated weight array from a randomly filled population of 0 and 1.
     Seed MUST be 123456789
     """
-    rand_np = RandomState(123456789)
+    rand_np = utils.default_random()
     b = rand_np.randint(2, size=(10, 10), dtype=int)
 
     expected = [[3.6, 5.4, 7.2, 4., 7.2, 3., 9., 5., 7.2, 3.6],
