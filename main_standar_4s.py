@@ -1,5 +1,3 @@
-import numpy as np
-
 import utils
 import utils_plotly
 import utils_population
@@ -23,33 +21,11 @@ rule.transition = [
 
 map_rows = 50
 map_cols = 50
-generations = 20
+generations = 85
 
 initial_population = utils_population.single_defector(map_rows, map_cols)
 
-matrix_list = [initial_population]
-
-for step in range(generations):
-    print(f"Step {step}")
-
-    current_step = np.empty(initial_population.shape, dtype=int)
-    previous_step = matrix_list[-1]
-
-    payoff_array = utils.generate_weight_array(previous_step, rule)
-
-    for idx_i, idx_j in np.ndindex(payoff_array.shape):
-        neighbours_payoff = utils.get_neighbours(payoff_array, idx_i, idx_j)
-        winner_idx = utils.get_highest_element_idx(neighbours_payoff)
-        neighbours = utils.get_neighbours(previous_step, idx_i, idx_j)
-
-        invader = neighbours[winner_idx[0]][winner_idx[1]]
-        current = previous_step[idx_i][idx_j]
-
-        result = rule.transition[current][invader]
-
-        current_step[idx_i, idx_j] = result
-
-    matrix_list.append(current_step)
+matrix_list = utils.run(initial_population, rule, generations)
 
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")

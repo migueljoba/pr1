@@ -12,14 +12,18 @@ rule.matrix = [
     [0, rule.b],
     [0, 1]
 ]
+
+rule.transition = [
+    [0, 1],
+    [0, 1]
+]
+
 # rotator con b = 1.67 o mayor
 filename = "rotator"
 print(f"Opening {filename}")
 
 population_array = utils_file.import_csv(filename)
 initial_population = np.array(population_array, dtype=int)
-
-matrix_list = [initial_population]
 
 matrix_list = utils.run(initial_population, rule, 10)
 

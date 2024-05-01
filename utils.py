@@ -115,7 +115,11 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int):
             neighbours_payoff = get_neighbours(payoff_array, idx_i, idx_j)
             winner_idx = get_highest_element_idx(neighbours_payoff)
             neighbours = get_neighbours(previous_step, idx_i, idx_j)
-            current_step[idx_i, idx_j] = neighbours[winner_idx[0]][winner_idx[1]]
+
+            invader = neighbours[winner_idx[0]][winner_idx[1]]
+            current = previous_step[idx_i][idx_j]
+            result = rule.transition[current][invader]
+            current_step[idx_i, idx_j] = result
 
         matrix_list.append(current_step)
 

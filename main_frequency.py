@@ -7,6 +7,12 @@ rule.matrix = [
     [0, rule.b],
     [0, 1]
 ]
+
+rule.transition = [
+    [0, 1],
+    [0, 1]
+]
+
 total_steps = 200
 population_elements = [0, 1]
 individual_probability = [0.1, 0.9]
