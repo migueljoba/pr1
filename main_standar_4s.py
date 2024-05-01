@@ -1,10 +1,8 @@
-import time
-
 import numpy as np
 
 import utils
-import utils_file
-import utils_plot
+import utils_plotly
+import utils_population
 
 rule = utils.Rule()
 rule.b = 1.85
@@ -23,15 +21,15 @@ rule.transition = [
     [2, 1, 2, 1],
 ]
 
-filename = "kaleido"
-print(f"Opening {filename}")
+map_rows = 50
+map_cols = 50
+generations = 20
 
-population_array = utils_file.import_csv(filename)
-initial_population = np.array(population_array, dtype=int)
+initial_population = utils_population.single_defector(map_rows, map_cols)
 
 matrix_list = [initial_population]
 
-for step in range(150):
+for step in range(generations):
     print(f"Step {step}")
 
     current_step = np.empty(initial_population.shape, dtype=int)
@@ -55,5 +53,7 @@ for step in range(150):
 
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")
-    time.sleep(1)
-    utils_plot.plot_4s_array(m, step=idx, b=rule.b, file_prefix=filename, format="png", grid_data=True)
+    # time.sleep(1)
+    # utils_plot.plot_4s_array(m, step=idx, b=rule.b, file_prefix=filename, format="png", grid_data=True)
+    utils_plotly.plot_map(m, step=idx, b=rule.b, file_prefix="kaleido", format="png", grid_data=True,
+                          title=f"b: {rule.b} - step: {idx}")
