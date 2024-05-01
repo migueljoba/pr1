@@ -2,13 +2,10 @@ import numpy as np
 from numpy.random import RandomState
 
 import utils
-
-rule0 = utils.Rule()
+from rule import Rule
+rule0 = Rule()
 rule0.b = 1.8
-rule0.matrix = [
-    [0, rule0.b],
-    [0, 1]
-]
+rule0.use_binary_rule()
 
 
 def test_rule():

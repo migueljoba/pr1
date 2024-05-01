@@ -1,27 +1,16 @@
 import utils
 import utils_plotly
 import utils_population
+from rule import Rule
 
-rule = utils.Rule()
+rule = Rule()
 rule.b = 1.85
-rule.matrix = [
-    [0, rule.b, 0, rule.b],
-    [0, 1, 0, 1],
-    [0, rule.b, 0, rule.b],
-    [0, 1, 0, 1]
-]
-# rotator con b = 1.67 o mayor
+rule.use_4s_rule()
+rule.use_4s_transition()
 
-rule.transition = [
-    [0, 3, 0, 3],
-    [2, 1, 2, 1],
-    [0, 3, 0, 3],
-    [2, 1, 2, 1],
-]
-
-map_rows = 50
-map_cols = 50
-generations = 85
+map_rows = 30
+map_cols = 30
+generations = 10
 
 initial_population = utils_population.single_defector(map_rows, map_cols)
 

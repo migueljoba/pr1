@@ -1,17 +1,11 @@
 import utils
 import utils_plotly
+from rule import Rule
 
-rule = utils.Rule()
+rule = Rule()
 rule.b = 1.26
-rule.matrix = [
-    [0, rule.b],
-    [0, 1]
-]
-
-rule.transition = [
-    [0, 1],
-    [0, 1]
-]
+rule.use_binary_rule()
+rule.use_binary_transition()
 
 total_steps = 200
 population_elements = [0, 1]

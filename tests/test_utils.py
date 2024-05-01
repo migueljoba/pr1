@@ -4,6 +4,11 @@ import numpy as np
 from numpy.random import RandomState
 
 import utils
+from rule import Rule
+
+rule = Rule()
+rule.b = 1.3
+rule.use_binary_rule()
 
 regular_array_test = [
     [0, 1, 2, 3, 4, 5, 6],
@@ -143,12 +148,9 @@ def test_compute_payoff_when():
 
 
 def test_compute_payoff_with_rule():
-    rule = utils.Rule()
+    rule = Rule()
     rule.b = 1.5
-    rule.matrix = [
-        [0, rule.b],
-        [0, 1]
-    ]
+    rule.use_binary_rule()
 
     arr1 = [[0, 1, 1], [1, 0, 1], [1, 1, 1]]
     r = utils.compute_payoff_with_rule(arr1, rule)

@@ -5,13 +5,12 @@ from numpy.random import RandomState
 
 import utils
 import utils_plot
+from rule import Rule
 
-rule = utils.Rule()
+rule = Rule()
 rule.b = 1.8
-rule.matrix = [
-    [0, rule.b],
-    [0, 1]
-]
+rule.use_binary_rule()
+rule.use_binary_transition()
 
 rand_np = RandomState(1234567)
 rand_initial_population = rand_np.randint(2, size=(100, 100), dtype=int)

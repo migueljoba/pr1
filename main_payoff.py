@@ -1,16 +1,17 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from numpy.random import RandomState
 
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import utils
+from rule import Rule
 
 # Available color maps
 # https://matplotlib.org/stable/users/explain/colors/colormaps.html
 
-from matplotlib import colormaps
-
-print(list(colormaps))
+rule = Rule()
+rule.b = 1.3
+rule.use_binary_rule()
 
 rand_np = RandomState(123456789)
 
@@ -18,15 +19,7 @@ size = (20, 20)
 print_map_data = True
 initial_population = rand_np.choice([0, 1], p=[0.1, 0.9], size=size)  # rand_np.randint(2, size=size, dtype=int)
 
-rule = utils.Rule()
-rule.b = 1.3
-rule.matrix = [
-    [0, rule.b],
-    [0, 1]
-]
-
 weight_array = utils.generate_weight_array(initial_population, rule)
-print(weight_array)
 
 fig, ax = plt.subplots(dpi=700)
 plt.title(f"b: {rule.b}")
@@ -46,8 +39,6 @@ if print_map_data:
                 verticalalignment='center',
                 color='white')
 
-
 plt.savefig(f"images/payoff-{rule.b}.svg", format="svg")
-
 
 plt.show()

@@ -5,18 +5,12 @@ import numpy as np
 import utils
 import utils_file
 import utils_plot
+from rule import Rule
 
-rule = utils.Rule()
+rule = Rule()
 rule.b = 1.9
-rule.matrix = [
-    [0, rule.b],
-    [0, 1]
-]
-
-rule.transition = [
-    [0, 1],
-    [0, 1]
-]
+rule.use_binary_rule()
+rule.use_binary_transition()
 
 # rotator con b = 1.67 o mayor
 filename = "rotator"
