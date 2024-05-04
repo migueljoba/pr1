@@ -1,4 +1,7 @@
+import time
+
 import plotly.express as px
+import numpy as np
 
 COLOR_DEFECTOR = "#ff7f50"
 COLOR_COOPERATOR = "#4682b4"
@@ -31,3 +34,18 @@ def plot_map(array, step=None, b=None, title: str = None, file_prefix=None, grid
 
     dpi = 300
     fig.write_image(filename, width=5 * dpi, height=2.5 * dpi)
+
+
+def imshow_animate(evolution_list):
+    fig = px.imshow(
+        evolution_list,
+        text_auto=True,
+        color_continuous_scale=colors_scale_4s, range_color=[0, 3],
+        animation_frame=0
+    )
+
+    # esconder barra de colores
+    fig.update_layout(coloraxis_showscale=False)
+
+    time.sleep(0.01)
+    fig.show()
