@@ -17,7 +17,11 @@ colors_scale_4s = [
 
 
 def plot_frequency(data: list, title: str = None):
-    return px.line(y=data, range_y=[0, 1], title=title)
+    labels = {
+        "x": "time",
+        "y": "strategy ratio"
+    }
+    return px.line(y=data, range_y=[0, 1], title=title, labels=labels, template="plotly_white")
 
 
 def plot_map(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False, format="png"):
