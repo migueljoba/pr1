@@ -165,12 +165,23 @@ def test_resume_frequency_data():
         collection.append(rand_matrix)
 
     # asserts strategy 0: defector
-    freq_data = utils.resume_frequency_data(collection, strategy=0)
+    freq_data = utils.resume_frequency_data(collection, strategy=[0])
     assert freq_data == [0.3175, 0.2975, 0.3275, 0.32, 0.2525, 0.2875, 0.3, 0.3025, 0.295, 0.3]
 
     # asserts strategy 1: cooperator
-    freq_data = utils.resume_frequency_data(collection, strategy=1)
+    freq_data = utils.resume_frequency_data(collection, strategy=[1])
     assert freq_data == [0.6825, 0.7025, 0.6725, 0.68, 0.7475, 0.7125, 0.7, 0.6975, 0.705, 0.7]
+
+
+def __test_resume_frequency_data_4s():
+    collection = []
+    for rnd in range(10):
+        rand_np = RandomState(rnd)
+        rand_matrix = rand_np.choice([0, 1, 2, 3], size=(20, 20))
+        collection.append(rand_matrix)
+
+    freq_data = utils.resume_frequency_data_4s(collection, strategy=[1, 3])
+    assert freq_data == [0.53, 0.495, 0.52, 0.4625, 0.5125, 0.515, 0.4925, 0.52, 0.4775, 0.47]
 
 
 if __name__ == '__main__':

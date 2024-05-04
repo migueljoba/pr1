@@ -84,32 +84,39 @@ def get_highest_element(array):
     return array[get_highest_element_idx(array)]
 
 
-def resume_frequency_data(collection: list, strategy: int = 1, break_loop: bool = True):
-    if strategy not in [0, 1]:
-        raise ValueError("Strategy must be 0 or 1.")
+def resume_frequency_data(collection: list, strategy: list = [1, 3], break_loop: bool = True):
+    if not isinstance(strategy, list):
+        raise ValueError(f"Specified `strategy` param must be {type([])}. Got `{type(strategy)}` instead.")
 
     frequency_data = []
     rows, cols = collection[0].shape
     population = rows * cols
+
     for col in collection:
         values, counter = np.unique(col, return_counts=True)
+        count = 0
+        for v, c in zip(values, counter):
+            if v in strategy:
+                count = count + c
 
-        if strategy in values:
-            strategy_counter = counter[strategy] / population
-        else:
-            strategy_counter = 0
-        frequency_data.append(strategy_counter)
+        ratio = count / population
 
-        if strategy_counter == 0 and break_loop:
+        frequency_data.append(ratio)
+
+        if ratio == 0 and break_loop:
             break
 
     return frequency_data
 
 
-def run(initial_population: np.ndarray, rule: Rule, generations: int):
+def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: bool = False) -> list:
     matrix_list = [initial_population]
 
     for gen in range(generations):
+
+        if verbose:
+            print(f"Generation {gen + 1}/{generations}")
+
         current_step = np.zeros(initial_population.shape, dtype=np.int8)
         previous_step = matrix_list[-1]
         payoff_array = generate_weight_array(previous_step, rule)
