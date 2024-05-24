@@ -19,7 +19,7 @@ colors_scale_4s = [
 def plot_frequency(data: list, title: str = None):
     labels = {
         "x": "time",
-        "y": "strategy ratio"
+        "y": "Cooperator strategy ratio"
     }
     return px.line(y=data, range_y=[0, 1], title=title, labels=labels, template="plotly_white")
 
@@ -45,7 +45,8 @@ def imshow_animate(evolution_list):
         evolution_list,
         text_auto=True,
         color_continuous_scale=colors_scale_4s, range_color=[0, 3],
-        animation_frame=0
+        animation_frame=0,
+        template="plotly_white"
     )
 
     # esconder barra de colores
