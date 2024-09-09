@@ -8,17 +8,16 @@ rule.b = 1.85
 rule.use_4s_rule()
 rule.use_4s_transition()
 
-map_rows = 30
-map_cols = 30
-generations = 10
+sides = 21
+generations = 26
 
-initial_population = utils_population.single_defector(map_rows, map_cols)
+initial_population = utils_population.single_defector(sides=sides)
 
-matrix_list = utils.run(initial_population, rule, generations)
+matrix_list = utils.run(initial_population, rule, generations, verbose=True)
 
 for idx, m in enumerate(matrix_list):
     print(f"Plotting: {idx}")
     # time.sleep(1)
     # utils_plot.plot_4s_array(m, step=idx, b=rule.b, file_prefix=filename, format="png", grid_data=True)
-    utils_plotly.plot_map(m, step=idx, b=rule.b, file_prefix="kaleido", format="png", grid_data=True,
+    utils_plotly.plot_map(m, step=idx, b=rule.b, file_prefix=f"kaleido-{sides}x{sides}", format="png", grid_data=True,
                           title=f"b: {rule.b} - step: {idx}")

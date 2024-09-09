@@ -1,8 +1,20 @@
+class RulePgg:
+    def __init__(self, pay=None):
+        self.pay = pay
+        self.tolerance = None
+
+        # factor multiplicador del fondo comun
+        self.factor = 1
+
+
 class Rule:
     def __init__(self, b=None):
         self.b = b
         self.matrix = None
         self.transition = None
+
+    def update_b(self, b: float):
+        self.b = b
 
     def _check_value_b(self):
         if self.b is None:

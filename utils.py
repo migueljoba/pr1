@@ -1,6 +1,6 @@
 import numpy as np
 
-from rule import Rule
+from rule import Rule, RulePgg
 
 
 def default_random():
@@ -19,6 +19,16 @@ def generate_weight_array(population, rule: Rule):
         weight_array[idx_i, idx_j] = compute_payoff_with_rule(neighbours, rule)
 
     return weight_array
+
+
+def generate_payoff_array_pgg(population, rule: RulePgg):
+    payoff_array = np.empty(population.shape, dtype=float)
+
+    for idx_i, idx_j in np.ndindex(population.shape):
+        neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
+        payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule)
+
+    return payoff_array
 
 
 def get_neighbours_idx_i(i: int, rows):
@@ -73,6 +83,43 @@ def compute_payoff_with_rule(block: list, rule: Rule):
         individual = nblock[1, 1]
 
     return sum([rule.matrix[individual][neighbour] for neighbour in nblock.ravel()])
+
+
+def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
+    if rule.pay is None:
+        raise ValueError("Rule must have pay. None given.")
+    if rule.tolerance is None:
+        raise ValueError("Rule must have tolerance. None given.")
+
+    nblock = np.array(block)
+
+    if nblock.shape != (3, 3):
+        raise ValueError("array must be of shape (3,3)")
+    else:
+        # asumir siempre que el individuo esta en (1, 1) para matriz de orden 3x3
+        individual = nblock[1, 1]
+
+    # Aca es donde estoy trancado. Tengo que calcular el pago de este bloque de vecinos,
+    # y el individuo de interes sigue siendo [1,1]
+
+    # total de individuos
+    t = nblock.size
+
+    # total de cooperadores en el bloque
+    n = nblock.sum()
+
+    # pago que recibe cada individuo, independiente a estrategia
+    common_pay = rule.factor * rule.pay * (n / t)
+
+    # pago del individuo de interes; indice [1,1] del bloque
+    if individual == 1:
+        # pago para cooperador
+        individual_payoff = common_pay - rule.pay
+    else:
+        # pago para free rider
+        individual_payoff = common_pay
+
+    return individual_payoff
 
 
 def get_highest_element_idx(array):
@@ -130,6 +177,40 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
             current = previous_step[idx_i][idx_j]
             result = rule.transition[current][invader]
             current_step[idx_i, idx_j] = result
+
+        matrix_list.append(current_step)
+
+    return matrix_list
+
+
+def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False) -> list:
+    matrix_list = [initial_population]
+
+    for gen in range(generations):
+        # if verbose:
+        #     print(f"Generation {gen + 1}/{generations}")
+
+        current_step = np.zeros(initial_population.shape, dtype=np.int8)
+        previous_step = matrix_list[-1]
+        payoff_array = generate_payoff_array_pgg(previous_step, rule)
+
+        for idx_i, idx_j in np.ndindex(initial_population.shape):
+            payoff = payoff_array[idx_i, idx_j]
+
+            # 0.6    >= 1 * (-0.2)
+            # 0.6    >= -0.2
+            if payoff >= (rule.pay - rule.tolerance):  # (1 - 0.2):   # payoff >= rule.pay * rule.tolerance:
+                # pago tolerable. Conservar estrategia
+                current_step[idx_i, idx_j] = previous_step[idx_i][idx_j]
+
+            else:
+                estrategia_actual = previous_step[idx_i][idx_j]
+                if estrategia_actual == 1:
+                    current_step[idx_i, idx_j] = 0
+                # else:
+                    # comentar D -> C, o
+                    # agregar probabilidad para convertir
+                    # current_step[idx_i, idx_j] = 1
 
         matrix_list.append(current_step)
 
