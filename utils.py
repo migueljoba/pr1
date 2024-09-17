@@ -183,7 +183,8 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
     return matrix_list
 
 
-def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False) -> list:
+def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
+            stop_when_all: int = None) -> list:
     matrix_list = [initial_population]
 
     for gen in range(generations):
@@ -208,10 +209,14 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
                 if estrategia_actual == 1:
                     current_step[idx_i, idx_j] = 0
                 # else:
-                    # comentar D -> C, o
-                    # agregar probabilidad para convertir
-                    # current_step[idx_i, idx_j] = 1
+                # comentar D -> C, o
+                # agregar probabilidad para convertir
+                # current_step[idx_i, idx_j] = 1
 
         matrix_list.append(current_step)
+
+        if stop_when_all is not None and np.all(current_step == stop_when_all):
+            # detener simulacion cuando todos los individuos tengan un valor especifico
+            break
 
     return matrix_list
