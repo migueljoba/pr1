@@ -173,15 +173,9 @@ def test_resume_frequency_data():
     assert freq_data == [0.6825, 0.7025, 0.6725, 0.68, 0.7475, 0.7125, 0.7, 0.6975, 0.705, 0.7]
 
 
-def __test_resume_frequency_data_4s():
-    collection = []
-    for rnd in range(10):
-        rand_np = RandomState(rnd)
-        rand_matrix = rand_np.choice([0, 1, 2, 3], size=(20, 20))
-        collection.append(rand_matrix)
-
-    freq_data = utils.resume_frequency_data_4s(collection, strategy=[1, 3])
-    assert freq_data == [0.53, 0.495, 0.52, 0.4625, 0.5125, 0.515, 0.4925, 0.52, 0.4775, 0.47]
+def test_custom_range():
+    assert utils.custom_range(1, 5, step=1) == [1, 2, 3, 4, 5]
+    assert utils.custom_range(0, 1, step=2 / 10) == [0.0, 0.2, 0.4, 0.6000000000000001, 0.8, 1.0]
 
 
 if __name__ == '__main__':

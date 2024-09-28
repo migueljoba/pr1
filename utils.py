@@ -3,13 +3,21 @@ import numpy as np
 from rule import Rule, RulePgg
 
 
+class Run:
+    def __init__(self, pay=None):
+        self.pay = pay
+        self.tolerance = None
+
+        # factor multiplicador del fondo comun
+        self.factor = 1
+
+
 def default_random():
     return np.random.RandomState(123456789)
 
 
-def random_population(elements: list, probability: list, size: tuple):
-    return default_random().choice(elements, p=probability, size=size)
-
+def random_population(elements: list, probability: list, size: tuple, default_seed: int = 123456789):
+    return np.random.RandomState(default_seed).choice(elements, p=probability, size=size)
 
 def generate_weight_array(population, rule: Rule):
     weight_array = np.empty(population.shape, dtype=float)
@@ -156,6 +164,10 @@ def resume_frequency_data(collection: list, strategy: list = [1, 3], break_loop:
     return frequency_data
 
 
+def resume_frequency_factor_data():
+    pass
+
+
 def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: bool = False) -> list:
     matrix_list = [initial_population]
 
@@ -184,12 +196,12 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
 
 
 def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
-            stop_when_all: int = None) -> list:
+            stop_when_all: int = None, stop_when_repeat: int = None) -> list:
     matrix_list = [initial_population]
 
-    for gen in range(generations):
-        # if verbose:
-        #     print(f"Generation {gen + 1}/{generations}")
+    for gen in range(generations - 1):
+        if verbose:
+            print(f"Generation {gen + 1}/{generations}")
 
         current_step = np.zeros(initial_population.shape, dtype=np.int8)
         previous_step = matrix_list[-1]
@@ -198,9 +210,7 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
         for idx_i, idx_j in np.ndindex(initial_population.shape):
             payoff = payoff_array[idx_i, idx_j]
 
-            # 0.6    >= 1 * (-0.2)
-            # 0.6    >= -0.2
-            if payoff >= (rule.pay - rule.tolerance):  # (1 - 0.2):   # payoff >= rule.pay * rule.tolerance:
+            if payoff >= rule.pay * (1 - (rule.tolerance / 100)):  # (1 - 0.2):   # payoff >= rule.pay * rule.tolerance:
                 # pago tolerable. Conservar estrategia
                 current_step[idx_i, idx_j] = previous_step[idx_i][idx_j]
 
@@ -220,3 +230,13 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
             break
 
     return matrix_list
+
+
+def custom_range(start, stop, step=1):
+    n = int(round((stop - start) / float(step)))
+    if n > 1:
+        return [start + step * i for i in range(n + 1)]
+    elif n == 1:
+        return [start]
+    else:
+        return []

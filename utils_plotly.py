@@ -21,7 +21,7 @@ def plot_frequency(data: list, title: str = None):
         "x": "generaciones",
         "y": "cooperadores / total_poblacion"
     }
-    return px.line(y=data, range_y=[0, 1], title=title, labels=labels, template="plotly_white", width=600, height=400)
+    return px.line(y=data, range_y=[0, 1], title=title, labels=labels, template="plotly_white")
 
 
 def plot_map(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False, format="png"):
@@ -40,13 +40,14 @@ def plot_map(array, step=None, b=None, title: str = None, file_prefix=None, grid
     fig.write_image(filename, width=5 * dpi, height=2.5 * dpi)
 
 
-def imshow_animate(evolution_list):
+def imshow_animate(evolution_list, **kwargs):
     fig = px.imshow(
         evolution_list,
         text_auto=True,
         color_continuous_scale=colors_scale_4s, range_color=[0, 3],
         animation_frame=0,
-        template="plotly_white"
+        template="plotly_white",
+        **kwargs
     )
 
     # esconder barra de colores
