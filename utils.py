@@ -16,8 +16,9 @@ def default_random():
     return np.random.RandomState(123456789)
 
 
-def random_population(elements: list, probability: list, size: tuple, default_seed: int = 123456789):
-    return np.random.RandomState(default_seed).choice(elements, p=probability, size=size)
+def random_population(elements: list, probability: list, size: tuple, seed: int = 123456789):
+    return np.random.RandomState(seed).choice(elements, p=probability, size=size)
+
 
 def generate_weight_array(population, rule: Rule):
     weight_array = np.empty(population.shape, dtype=float)
