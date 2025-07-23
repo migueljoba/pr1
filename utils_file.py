@@ -11,21 +11,21 @@ def import_csv(filename, directory: str = "./data_source", format: str = "csv"):
 
 
 def export_csv(data, filename, directory: str = "./data_source", header=None):
-    # LineComment: Abrimos el archivo en modo escritura ('w').
-    # LineComment: newline='' evita que se creen filas en blanco entre los datos.
+    # Abrimos el archivo en modo escritura ('w').
+    # newline='' evita que se creen filas en blanco entre los datos.
     if header is None:
         header = []
     with open(filename, 'w', newline='') as archivo_csv:
         # LineComment: Creamos un objeto escritor de CSV.
         escritor = csv.writer(archivo_csv)
 
-        # LineComment: Escribimos la fila de encabezado (opcional pero recomendado).
+        # Escribimos la fila de encabezado (opcional pero recomendado).
         if header:
             escritor.writerow(header)
 
-        # LineComment: Usamos enumerate para obtener el índice (i) y el valor (v) de cada elemento.
+        # Usamos enumerate para obtener el índice (i) y el valor (v) de cada elemento.
         for i, v in enumerate(data):
-            # LineComment: Escribimos una nueva fila con el índice y el valor.
+            # Escribimos una nueva fila con el índice y el valor.
             escritor.writerow([i, v])
 
     print(f"Archivo '{filename}' generado.")
