@@ -1,8 +1,57 @@
 import csv
+import os
+import numpy as np
 
 
-def import_csv(filename, directory: str = "./data_source/", format: str = "csv"):
+def import_csv(filename, directory: str = "./data_source", format: str = "csv"):
     filepath = f"{directory}/{filename}.{format}"
     with open(filepath, 'r') as f:
         reader = csv.reader(f)
         return list(reader)
+
+
+def export_csv(data, filename, directory: str = "./data_source", header=None):
+    # LineComment: Abrimos el archivo en modo escritura ('w').
+    # LineComment: newline='' evita que se creen filas en blanco entre los datos.
+    if header is None:
+        header = []
+    with open(filename, 'w', newline='') as archivo_csv:
+        # LineComment: Creamos un objeto escritor de CSV.
+        escritor = csv.writer(archivo_csv)
+
+        # LineComment: Escribimos la fila de encabezado (opcional pero recomendado).
+        if header:
+            escritor.writerow(header)
+
+        # LineComment: Usamos enumerate para obtener el índice (i) y el valor (v) de cada elemento.
+        for i, v in enumerate(data):
+            # LineComment: Escribimos una nueva fila con el índice y el valor.
+            escritor.writerow([i, v])
+
+    print(f"Archivo '{filename}' generado.")
+
+
+def export_evolution_csv(data, directory, fileprefix):
+    """
+    Exporta cada ndarray de la lista 'data' a un archivo CSV separado.
+    El nombre de cada archivo es: fileprefixXXX.csv donde XXX es el índice con 3 dígitos.
+    """
+    # Asegurarse que el directorio existe
+    os.makedirs(directory, exist_ok=True)
+
+    for idx, arr in enumerate(data):
+        # Formatea el índice a 3 dígitos con ceros a la izquierda
+        idx_str = f"{idx}"
+        filename = f"{fileprefix}-gen-{idx_str}.csv"
+        filepath = os.path.join(directory, filename)
+        # Guarda el ndarray como CSV
+        np.savetxt(filepath, arr, fmt='%d', delimiter=',')
+        # Puedes usar fmt='%d' porque son solo 0 y 1
+
+
+# --- Ejemplo de uso ---
+if __name__ == "__main__":
+    # Crear algunos datos de ejemplo
+    data = [np.random.randint(0, 2, size=(5, 5)), np.random.randint(0, 2, size=(3, 7))]
+    export_evolution_csv(data, "resultados", "poblacion_")
+    print("¡Archivos exportados!")
