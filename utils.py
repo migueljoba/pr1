@@ -33,8 +33,12 @@ def generate_weight_array(population, rule: Rule):
 def generate_payoff_array_pgg(population, rule: RulePgg):
     payoff_array = np.empty(population.shape, dtype=float)
 
+    # % iterar sobre poblacion actual
     for idx_i, idx_j in np.ndindex(population.shape):
+        # % obtener vecinos
         neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
+
+        # % calcular pago para el individuo
         payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule)
 
     return payoff_array
@@ -43,13 +47,20 @@ def generate_payoff_array_pgg(population, rule: RulePgg):
 def get_neighbours_idx_i(i: int, rows):
     if rows < 3:
         raise ValueError("Cols cannot be less than 3!")
-    return [i - 1, i - 1, i - 1, i, i, i, (i + 1) % rows, (i + 1) % rows, (i + 1) % rows]
+
+    return [
+        i - 1, i - 1, i - 1,
+        i, i, i,
+        (i + 1) % rows, (i + 1) % rows, (i + 1) % rows
+    ]
 
 
 def get_neighbours_idx_j(j: int, cols):
     if cols < 3:
         raise ValueError("Rows cannot be less than 3!")
-    return [j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols, j - 1, j, (j + 1) % cols]
+    return [j - 1, j, (j + 1) % cols,
+            j - 1, j, (j + 1) % cols,
+            j - 1, j, (j + 1) % cols]
 
 
 def get_neighbours_idx(arrange: list = [], i: int = None, j: int = None) -> list:
@@ -107,9 +118,6 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     else:
         # asumir siempre que el individuo esta en (1, 1) para matriz de orden 3x3
         individual = nblock[1, 1]
-
-    # Aca es donde estoy trancado. Tengo que calcular el pago de este bloque de vecinos,
-    # y el individuo de interes sigue siendo [1,1]
 
     # total de individuos
     t = nblock.size
@@ -197,25 +205,37 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
 
 
 def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
-            stop_when_all: int = None, stop_when_repeat: int = None) -> list:
+            stop_when_all: int = None, stop_when_repeat: int = None) -> dict:
     matrix_list = [initial_population]
+    payoff_list = []
+    # generations = rule.generations
 
+    # % iterar generaciones
     for gen in range(generations - 1):
         if verbose:
             print(f"Generation {gen + 1}/{generations}")
 
         current_step = np.zeros(initial_population.shape, dtype=np.int8)
         previous_step = matrix_list[-1]
-        payoff_array = generate_payoff_array_pgg(previous_step, rule)
 
+        # % generar matriz de pagos
+        payoff_array = generate_payoff_array_pgg(previous_step, rule)
+        payoff_list.append(payoff_array)
+
+        # % iterar poblacion actual
         for idx_i, idx_j in np.ndindex(initial_population.shape):
+
+            # % obtener pago para indice i,j
             payoff = payoff_array[idx_i, idx_j]
 
+            # % tolerancia: evaluar estrategia segun el pago obtenido
             if payoff >= rule.pay * (1 - (rule.tolerance / 100)):  # (1 - 0.2):   # payoff >= rule.pay * rule.tolerance:
+                # % pago tolerable. Conservar estrategia
                 # pago tolerable. Conservar estrategia
                 current_step[idx_i, idx_j] = previous_step[idx_i][idx_j]
 
             else:
+                # % pago no tolerable. Cambiar estrategia
                 estrategia_actual = previous_step[idx_i][idx_j]
                 if estrategia_actual == 1:
                     current_step[idx_i, idx_j] = 0
@@ -230,7 +250,7 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
             # detener simulacion cuando todos los individuos tengan un valor especifico
             break
 
-    return matrix_list
+    return {'matrix_list': matrix_list, 'payoff_list': payoff_list}
 
 
 def custom_range(start, stop, step=1):
