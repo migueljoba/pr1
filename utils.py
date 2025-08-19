@@ -86,6 +86,7 @@ def get_moore_neighbours(arrange: np.ndarray | list, i: int, j: int, r: int = 1)
     ii = (np.arange(i - r, i + r + 1) % m)
     jj = (np.arange(j - r, j + r + 1) % n)
 
+    # producto cartesiando
     window = arrange[np.ix_(ii, jj)]
     return window.tolist()
 

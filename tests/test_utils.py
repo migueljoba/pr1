@@ -114,6 +114,50 @@ def test_get_moore_neighbours():
     assert n4 == [[18, 19, 20], [25, 26, 27], [32, 33, 34]]
 
 
+def test_get_moore_neighbours_when_radio_2():
+    n0 = utils.get_moore_neighbours(np_regular_array, 0, 0, r=2)
+    assert n0 == [[40, 41, 35, 36, 37],
+                  [47, 48, 42, 43, 44],
+                  [5, 6, 0, 1, 2],
+                  [12, 13, 7, 8, 9],
+                  [19, 20, 14, 15, 16]]
+
+    n1 = utils.get_moore_neighbours(np_regular_array, 0, 6, r=2)
+    assert n1 == [[39, 40, 41, 35, 36],
+                  [46, 47, 48, 42, 43],
+                  [4, 5, 6, 0, 1],
+                  [11, 12, 13, 7, 8],
+                  [18, 19, 20, 14, 15]]
+
+    n2 = utils.get_moore_neighbours(np_regular_array, 6, 0, r=2)
+    assert n2 == [[33, 34, 28, 29, 30],
+                  [40, 41, 35, 36, 37],
+                  [47, 48, 42, 43, 44],
+                  [5, 6, 0, 1, 2],
+                  [12, 13, 7, 8, 9]]
+
+    n3 = utils.get_moore_neighbours(np_regular_array, 6, 6, r=2)
+    assert n3 == [[32, 33, 34, 28, 29],
+                  [39, 40, 41, 35, 36],
+                  [46, 47, 48, 42, 43],
+                  [4, 5, 6, 0, 1],
+                  [11, 12, 13, 7, 8]]
+
+    n4 = utils.get_moore_neighbours(np_regular_array, 3, 5, r=2)
+    assert n4 == [[10, 11, 12, 13, 7],
+                  [17, 18, 19, 20, 14],
+                  [24, 25, 26, 27, 21],
+                  [31, 32, 33, 34, 28],
+                  [38, 39, 40, 41, 35]]
+
+    n5 = utils.get_moore_neighbours(np_regular_array, 3, 3, r=2)
+    assert n5 == [[8, 9, 10, 11, 12],
+                  [15, 16, 17, 18, 19],
+                  [22, 23, 24, 25, 26],
+                  [29, 30, 31, 32, 33],
+                  [36, 37, 38, 39, 40]]
+
+
 def test_compute_payoff_when_full_0():
     arr0 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     p = utils.compute_payoff(arr0, 1)
