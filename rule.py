@@ -6,6 +6,11 @@ class RulePgg:
         # factor multiplicador del fondo comun
         self.factor = 1
 
+        # numero de lados para matriz cuadrada
+        self.sides = None
+
+        # numero de generaciones para la simulacion
+        self.generations = None
 
 class Rule:
     def __init__(self, b=None):

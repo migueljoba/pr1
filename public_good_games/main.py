@@ -13,7 +13,8 @@ generations = 3
 
 initial_population = utils.random_population([0, 1], [0.2, 0.8], size=size)
 
-matrix_list = utils.run_pgg(initial_population, rule, generations, verbose=True)
+matrix_result = utils.run_pgg(initial_population, rule, generations, verbose=True)
+matrix_list = matrix_result.get("matrix_list")
 
 plot_data = utils.resume_frequency_data(matrix_list, strategy=[1])
 plot_title = f"b: {rule.b}"
