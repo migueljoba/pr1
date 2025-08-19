@@ -77,8 +77,36 @@ def get_neighbours(arrange: list = [], i: int = None, j: int = None) -> list:
     return n.tolist()  # TODO retornar ndarray
 
 
-def get_moore_neighbours(arrange: np.ndarray | list, i: int, j: int, r: int = 1) -> list[list]:
+def get_von_neumann_neighbours(arrange: np.ndarray | list, i: int, j: int) -> list[list]:
+    """
+    Vecindad von Neumann (radio 1) con bordes periódicos.
+    - arrange: np.ndarray 2D o list (se convierte a np.ndarray)
+    - i: fila, j: columna
+    Retorna: [[arr[i-1,j]],
+              [arr[i,j-1], arr[i,j], arr[i,j+1]],
+              [arr[i+1,j]]]
+    """
 
+    # Convertir a np.ndarray si vino como list
+    if isinstance(arrange, list):
+        arrange = np.asarray(arrange)
+
+    if not isinstance(arrange, np.ndarray) or arrange.ndim != 2:
+        raise ValueError("'arrange' debe ser un np.ndarray 2D o list convertible a 2D")
+
+    m, n = arrange.shape
+
+    # radio fijo = 1, con wrap
+    up = arrange[(i - 1) % m, j % n]
+    left = arrange[i % m, (j - 1) % n]
+    mid = arrange[i % m, j % n]
+    right = arrange[i % m, (j + 1) % n]
+    down = arrange[(i + 1) % m, j % n]
+
+    return [[up], [left, mid, right], [down]]
+
+
+def get_moore_neighbours(arrange: np.ndarray | list, i: int, j: int, r: int = 1) -> list[list]:
     if not isinstance(arrange, np.ndarray) or arrange.ndim != 2:
         arrange = np.array(arrange)
 

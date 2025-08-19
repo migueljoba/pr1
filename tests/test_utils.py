@@ -97,6 +97,23 @@ def test_get_neighbours():
     assert n4 == [[18, 19, 20], [25, 26, 27], [32, 33, 34]]
 
 
+def test_get_von_neumann_neighbours():
+    n0 = utils.get_von_neumann_neighbours(np_regular_array, 3, 3)
+    assert n0 == [[17], [23, 24, 25], [31]]
+
+    n1 = utils.get_von_neumann_neighbours(np_regular_array, 0, 0)
+    assert n1 == [[42], [6, 0, 1], [7]]
+
+    n2 = utils.get_von_neumann_neighbours(np_regular_array, 0, 6)
+    assert n2 == [[48], [5, 6, 0], [13]]
+
+    n3 = utils.get_von_neumann_neighbours(np_regular_array, 6, 0)
+    assert n3 == [[35], [48, 42, 43], [0]]
+
+    n4 = utils.get_von_neumann_neighbours(np_regular_array, 6, 6)
+    assert n4 == [[41], [47, 48, 42], [6]]
+
+
 def test_get_moore_neighbours():
     n0 = utils.get_moore_neighbours(np_regular_array, 0, 0)
     assert n0 == [[48, 42, 43], [6, 0, 1], [13, 7, 8]]
