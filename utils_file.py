@@ -11,11 +11,18 @@ def import_csv(filename, directory: str = "./data_source", format: str = "csv"):
 
 
 def export_csv(data, filename, directory: str = "./data_source", header=None):
-    # Abrimos el archivo en modo escritura ('w').
-    # newline='' evita que se creen filas en blanco entre los datos.
+
+    # Asegurarse que el directorio existe
+    os.makedirs(directory, exist_ok=True)
+
     if header is None:
         header = []
-    with open(filename, 'w', newline='') as archivo_csv:
+    # Abrimos el archivo en modo escritura ('w').
+    # newline='' evita que se creen filas en blanco entre los datos.
+
+    filepath = os.path.join(directory, filename)
+
+    with open(filepath, 'w', newline='') as archivo_csv:
         # LineComment: Creamos un objeto escritor de CSV.
         escritor = csv.writer(archivo_csv)
 

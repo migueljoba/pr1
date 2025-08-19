@@ -36,19 +36,18 @@ def simulate(rule: RulePgg, evolution: bool = True, frequency: bool = True, paym
     if payment:
         utils_file.export_evolution_csv(payoff_list, directory, fileprefix=f"pago")
 
-    plot_freq = utils.resume_frequency_data(matrix_list)
-    plot_title = f"pago: {rule.pay}, factor: {rule.factor}, tolerancia: {rule.tolerance}"
-    # plot = utils_plotly.plot_frequency(data=plot_freq, title=plot_title)
-    # plot.show()
-
-    csv_frecuency_file = f"{directory}/freq-{rule_identifier}.csv"
-
     if frequency:
-        utils_file.export_csv(plot_freq, csv_frecuency_file, header=["indice", "valor"])
+        plot_freq = utils.resume_frequency_data(matrix_list)
+        plot_title = f"pago: {rule.pay}, factor: {rule.factor}, tolerancia: {rule.tolerance}"
+        # plot = utils_plotly.plot_frequency(data=plot_freq, title=plot_title)
+        # plot.show()
+        csv_frecuency_file = f"{rule_identifier}.csv"
+        frequency_dir = f"./generador_datos/frequency"
+        utils_file.export_csv(plot_freq, csv_frecuency_file, directory=frequency_dir, header=["indice", "valor"])
 
 
-for factor in utils.custom_range(1, 2, step=1):
-    for tol in utils.custom_range(0, 2, step=1):
+for factor in utils.custom_range(1, 5, step=1):
+    for tol in utils.custom_range(0, 10, step=1):
         print(f"Factor: {factor}, Tolerancia: {tol}")
         rule = RulePgg()
         rule.pay = 1
@@ -56,9 +55,9 @@ for factor in utils.custom_range(1, 2, step=1):
         rule.tolerance = tol
 
         rule.sides = 25
-        rule.generations = 5
+        rule.generations = 50
 
         simulate(rule,
-                 evolution=True,
+                 evolution=False,
                  frequency=True,
-                 payment=True)
+                 payment=False)
