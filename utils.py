@@ -77,6 +77,19 @@ def get_neighbours(arrange: list = [], i: int = None, j: int = None) -> list:
     return n.tolist()  # TODO retornar ndarray
 
 
+def get_moore_neighbours(arrange: np.ndarray | list, i: int, j: int, r: int = 1) -> list[list]:
+
+    if not isinstance(arrange, np.ndarray) or arrange.ndim != 2:
+        arrange = np.array(arrange)
+
+    m, n = arrange.shape
+    ii = (np.arange(i - r, i + r + 1) % m)
+    jj = (np.arange(j - r, j + r + 1) % n)
+
+    window = arrange[np.ix_(ii, jj)]
+    return window.tolist()
+
+
 def compute_payoff(array, b: float):
     narray = np.array(array)
 

@@ -97,6 +97,23 @@ def test_get_neighbours():
     assert n4 == [[18, 19, 20], [25, 26, 27], [32, 33, 34]]
 
 
+def test_get_moore_neighbours():
+    n0 = utils.get_moore_neighbours(np_regular_array, 0, 0)
+    assert n0 == [[48, 42, 43], [6, 0, 1], [13, 7, 8]]
+
+    n1 = utils.get_moore_neighbours(np_regular_array, 0, 6)
+    assert n1 == [[47, 48, 42], [5, 6, 0], [12, 13, 7]]
+
+    n2 = utils.get_moore_neighbours(np_regular_array, 6, 0)
+    assert n2 == [[41, 35, 36], [48, 42, 43], [6, 0, 1]]
+
+    n3 = utils.get_moore_neighbours(np_regular_array, 6, 6)
+    assert n3 == [[40, 41, 35], [47, 48, 42], [5, 6, 0]]
+
+    n4 = utils.get_moore_neighbours(np_regular_array, 3, 5)
+    assert n4 == [[18, 19, 20], [25, 26, 27], [32, 33, 34]]
+
+
 def test_compute_payoff_when_full_0():
     arr0 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     p = utils.compute_payoff(arr0, 1)
