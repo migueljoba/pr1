@@ -12,6 +12,10 @@ class RulePgg:
         # numero de generaciones para la simulacion
         self.generations = None
 
+    def __str__(self):
+        return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, tolerance:{self.tolerance}"
+
+
 class Rule:
     def __init__(self, b=None):
         self.b = b
