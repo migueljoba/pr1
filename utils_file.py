@@ -48,8 +48,7 @@ def export_evolution_csv(data, directory, fileprefix):
 
     for idx, arr in enumerate(data):
         # Formatea el índice a 3 dígitos con ceros a la izquierda
-        idx_str = f"{idx}"
-        filename = f"{fileprefix}-gen-{idx_str}.csv"
+        filename = f"{fileprefix}-gen-{idx:03d}.csv"
         filepath = os.path.join(directory, filename)
         # Guarda el ndarray como CSV
         np.savetxt(filepath, arr, fmt='%d', delimiter=',')
