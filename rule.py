@@ -12,8 +12,11 @@ class RulePgg:
         # numero de generaciones para la simulacion
         self.generations = None
 
+        # radio para vecindad de Moore
+        self.radio = 1
+
     def __str__(self):
-        return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, tolerance:{self.tolerance}"
+        return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, radio: {self.radio}, tolerance:{self.tolerance}"
 
 
 class Rule:

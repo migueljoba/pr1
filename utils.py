@@ -35,8 +35,9 @@ def generate_payoff_array_pgg(population, rule: RulePgg):
 
     # % iterar sobre poblacion actual
     for idx_i, idx_j in np.ndindex(population.shape):
-        # % obtener vecinos
-        neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j)
+        # obtener vecinos
+        # neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j) # se mantiene para verificar validez de vecindad de Moore con radio = 1
+        neighbours = get_moore_neighbours(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
 
         # % calcular pago para el individuo
         payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule)
@@ -155,11 +156,13 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
 
     nblock = np.array(block)
 
-    if nblock.shape != (3, 3):
-        raise ValueError("array must be of shape (3,3)")
+    # control de tamanho de vecindad
+    required_shape = 2 * rule.radio + 1
+    if nblock.shape != (required_shape, required_shape):
+        raise ValueError(f"array must be of shape ({required_shape},{required_shape})")
     else:
-        # asumir siempre que el individuo esta en (1, 1) para matriz de orden 3x3
-        individual = nblock[1, 1]
+        # elemento central en una vecindad de Moore. Sus coorenadas relativas siempre son (r, r)
+        individual = nblock[rule.radio, rule.radio]
 
     # total de individuos
     t = nblock.size
@@ -170,7 +173,7 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     # pago que recibe cada individuo, independiente a estrategia
     common_pay = rule.factor * rule.pay * (n / t)
 
-    # pago del individuo de interes; indice [1,1] del bloque
+    # pago del individuo de interes; indice [r,r] del bloque
     if individual == 1:
         # pago para cooperador
         individual_payoff = common_pay - rule.pay
