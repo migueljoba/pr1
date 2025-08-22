@@ -156,7 +156,7 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
 
     nblock = np.array(block)
 
-    # control de tamanho de vecindad
+    # control de tamano de vecindad
     required_shape = 2 * rule.radio + 1
     if nblock.shape != (required_shape, required_shape):
         raise ValueError(f"array must be of shape ({required_shape},{required_shape})")
@@ -167,8 +167,8 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     # total de individuos
     t = nblock.size
 
-    # total de cooperadores en el bloque
-    n = nblock.sum()
+    # total de cooperadores en el bloque. Cooperadores son valores 1 y 3
+    n = np.sum(nblock == 1) + np.sum(nblock == 3)
 
     # pago que recibe cada individuo, independiente a estrategia
     common_pay = rule.factor * rule.pay * (n / t)
@@ -273,21 +273,27 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
             # % obtener pago para indice i,j
             payoff = payoff_array[idx_i, idx_j]
 
+            estado_previo = previous_step[idx_i][idx_j]
+
             # % tolerancia: evaluar estrategia segun el pago obtenido
-            if payoff >= rule.pay * (1 - (rule.tolerance / 100)):  # (1 - 0.2):   # payoff >= rule.pay * rule.tolerance:
+            if payoff >= rule.pay * (1 - (rule.tolerance / 100)):
                 # % pago tolerable. Conservar estrategia
-                # pago tolerable. Conservar estrategia
-                current_step[idx_i, idx_j] = previous_step[idx_i][idx_j]
+                current_step[idx_i, idx_j] = rule.transition[estado_previo][estado_previo]
 
             else:
-                # % pago no tolerable. Cambiar estrategia
-                estrategia_actual = previous_step[idx_i][idx_j]
-                if estrategia_actual == 1:
-                    current_step[idx_i, idx_j] = 0
+                # % pago no tolerable. Cambiar a estrategia desertora
+                if estado_previo == 1:
+                    current_step[idx_i, idx_j] = rule.transition[estado_previo][0]
+
                 # else:
                 # comentar D -> C, o
                 # agregar probabilidad para convertir
                 # current_step[idx_i, idx_j] = 1
+
+        # si paso actual y anterior son iguales, asumir que ya habrá evolución y terminar simulación
+        if np.all(previous_step == current_step):
+            # break
+            pass  # TODO detener simulacion cuando las matrices ya no evolucionen
 
         matrix_list.append(current_step)
 

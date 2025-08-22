@@ -3,10 +3,10 @@ import time
 import plotly.express as px
 import numpy as np
 
-COLOR_DEFECTOR = "#ff7f50"
-COLOR_COOPERATOR = "#4682b4"
-COLOR_NEW_DEFECTOR = "#ffd700"
-COLOR_NEW_COOPERATOR = "#9acd32"
+COLOR_DEFECTOR = "#ff7f50"  # rojo
+COLOR_COOPERATOR = "#4682b4"  # azul
+COLOR_NEW_DEFECTOR = "#ffd700"  # amarillo
+COLOR_NEW_COOPERATOR = "#9acd32"  # verder
 
 colors_scale_4s = [
     (0, COLOR_DEFECTOR), (0.25, COLOR_DEFECTOR),

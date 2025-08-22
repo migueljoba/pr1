@@ -1,7 +1,21 @@
+TRANSITION_4S = [
+    [0, 3, 0, 3],
+    [2, 1, 2, 1],
+    [0, 3, 0, 3],
+    [2, 1, 2, 1],
+]
+
+
 class RulePgg:
     def __init__(self, pay=None):
         self.pay = pay
         self.tolerance = None
+
+        # transicion de dos estados, por defecto
+        self.transition = [
+            [0, 1],
+            [0, 1]
+        ]
 
         # factor multiplicador del fondo comun
         self.factor = 1
@@ -17,6 +31,9 @@ class RulePgg:
 
     def __str__(self):
         return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, radio: {self.radio}, tolerance:{self.tolerance}"
+
+    def use_3s_transition(self):
+        self.transition = TRANSITION_4S
 
 
 class Rule:
@@ -56,9 +73,4 @@ class Rule:
         ]
 
     def use_4s_transition(self):
-        self.transition = [
-            [0, 3, 0, 3],
-            [2, 1, 2, 1],
-            [0, 3, 0, 3],
-            [2, 1, 2, 1],
-        ]
+        self.transition = TRANSITION_4S
