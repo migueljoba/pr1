@@ -11,7 +11,6 @@ def import_csv(filename, directory: str = "./data_source", format: str = "csv"):
 
 
 def export_csv(data, filename, directory: str = "./data_source", header=None):
-
     # Asegurarse que el directorio existe
     os.makedirs(directory, exist_ok=True)
 
@@ -55,7 +54,6 @@ def export_evolution_csv(data, directory, fileprefix):
         # Puedes usar fmt='%d' porque son solo 0 y 1
 
 
-# --- Ejemplo de uso ---
 if __name__ == "__main__":
     # Crear algunos datos de ejemplo
     data = [np.random.randint(0, 2, size=(5, 5)), np.random.randint(0, 2, size=(3, 7))]

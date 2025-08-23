@@ -29,11 +29,26 @@ class RulePgg:
         # radio para vecindad de Moore
         self.radio = 1
 
+        self.info_seed = 123456789
+
+        self.info_generations = None
+
     def __str__(self):
         return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, radio: {self.radio}, tolerance:{self.tolerance}"
 
     def use_3s_transition(self):
         self.transition = TRANSITION_4S
+
+    def csv_row(self):
+        return (f"{self.sides},{self.radio},{self.pay},{self.factor},"
+                f"{self.tolerance},{self.info_seed},{self.info_generations}")
+
+    def params_str(self):
+        return f"dim{self.sides}-radio{self.radio}-pay{self.pay}-factor{self.factor}-tol{self.tolerance}"
+
+    @staticmethod
+    def csv_headers():
+        return ["sides", "radio", "pay", "factor", "tolerance", "info_seed", "info_generations"]
 
 
 class Rule:
