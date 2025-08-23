@@ -250,7 +250,7 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
 
 
 def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
-            stop_when_all: int = None, stop_when_repeat: int = None) -> dict:
+            stop_when_all: list | int = None, stop_when_repeat: int = None) -> dict:
     matrix_list = [initial_population]
     payoff_list = []
     # generations = rule.generations
@@ -297,7 +297,7 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
 
         matrix_list.append(current_step)
 
-        if stop_when_all is not None and np.all(current_step == stop_when_all):
+        if stop_when_all is not None and np.all(np.isin(current_step, stop_when_all)):
             # detener simulacion cuando todos los individuos tengan un valor especifico
             break
 
