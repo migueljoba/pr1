@@ -1,7 +1,8 @@
 import time
+from pathlib import Path
 
+import pandas as pd
 import plotly.express as px
-import numpy as np
 
 COLOR_DEFECTOR = "#ff7f50"  # rojo
 COLOR_COOPERATOR = "#4682b4"  # azul
@@ -54,4 +55,57 @@ def imshow_animate(evolution_list, **kwargs):
     fig.update_layout(coloraxis_showscale=False)
 
     time.sleep(0.01)
+    fig.show()
+
+
+def plot_histogram_from_csv(
+        path_csv: str | Path,
+        column_name: str,
+        save_html: str | Path | None = None,
+        separator: str = ",",
+        encoding: str = "utf-8"
+):
+    """
+    Crea un histograma de frecuencias para la columna especificada de un CSV.
+
+    Args:
+        path_csv: Ruta al archivo CSV.
+        column_name: Nombre de la columna a graficar (obligatorio).
+        save_html: Si se indica, guarda el gráfico como HTML interactivo.
+        separator: Separador del CSV (default: ',').
+        encoding: Encoding del archivo (default: 'utf-8').
+    """
+    path = Path(path_csv)
+    if not path.exists():
+        raise FileNotFoundError(f"No se encontró el archivo: {path}")
+
+    df = pd.read_csv(path, sep=separator, encoding=encoding)
+
+    if column_name not in df.columns:
+        raise ValueError(f"La columna '{column_name}' no existe en el CSV. Columnas: {list(df.columns)}")
+
+    # Convertir a numérico
+    x = pd.to_numeric(df[column_name], errors="coerce").dropna()
+    if x.empty:
+        raise ValueError(f"La columna '{column_name}' no contiene valores numéricos válidos.")
+
+    fig = px.histogram(
+        df,
+        x=column_name,
+        text_auto=True,
+        title=f"{path_csv}: {column_name}",
+        labels={column_name: column_name, "count": "Ocurrencias"}
+    )
+
+    fig.update_layout(
+        bargap=0.1,
+        template="plotly_white"
+    )
+
+    if save_html:
+        out = Path(save_html)
+        if out.suffix.lower() != ".html":
+            out = out.with_suffix(".html")
+        fig.write_html(out, include_plotlyjs="cdn")
+
     fig.show()
