@@ -33,6 +33,10 @@ class RulePgg:
 
         self.info_generations = None
 
+        self.prob_cooperator = None
+
+        self.prob_defector = None
+
     def __str__(self):
         return f"Rule PGG. pay:{self.pay}, factor:{self.factor}, radio: {self.radio}, tolerance:{self.tolerance}"
 
@@ -40,15 +44,22 @@ class RulePgg:
         self.transition = TRANSITION_4S
 
     def csv_row(self):
-        return (f"{self.sides},{self.radio},{self.pay},{self.factor},"
+        return (f"{self.sides},{self.prob_defector},{self.prob_cooperator},{self.radio},{self.pay},{self.factor},"
                 f"{self.tolerance},{self.info_seed},{self.info_generations}")
 
     def params_str(self):
-        return f"dim{self.sides}-radio{self.radio}-pay{self.pay}-factor{self.factor}-tol{self.tolerance}"
+        return f"dim{self.sides}-prob-d{self.prob_defector}c{self.prob_cooperator}-radio{self.radio}-pay{self.pay}-factor{self.factor}-tol{self.tolerance}"
 
     @staticmethod
     def csv_headers():
-        return ["sides", "radio", "pay", "factor", "tolerance", "info_seed", "info_generations"]
+        return ["sides", "defector", "cooperator", "radio", "pay", "factor", "tolerance", "info_seed",
+                "info_generations"]
+
+    def population_prob(self, *, c: float, d: float):
+        if c + d != 1:
+            raise ValueError(f"Sumba de probabilidades para C y D debe ser igual a 1. En cambio se obtiene {c + d}")
+        self.prob_cooperator = c
+        self.prob_defector = d
 
 
 class Rule:
