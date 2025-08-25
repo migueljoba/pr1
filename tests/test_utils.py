@@ -30,6 +30,14 @@ arrary_order_mn = [
 np_regular_array = np.array(regular_array_test)
 
 
+def test_varians_cooperator():
+    assert utils.VARIANTS_COOPERATOR == [1, 3]
+
+
+def test_varians_defectos():
+    assert utils.VARIANTS_DEFECTOR == [0, 2]
+
+
 def test_random_population():
     population = utils.random_population(elements=[0, 1], probability=[0.5, 0.5], size=(3, 10))
     expected = [[1, 1, 1, 1, 0, 1, 1, 0, 1, 1], [1, 1, 1, 0, 0, 0, 0, 0, 0, 1], [1, 1, 0, 0, 1, 1, 0, 0, 1, 0]]

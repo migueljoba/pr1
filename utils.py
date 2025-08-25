@@ -2,7 +2,9 @@ import numpy as np
 
 from rule import Rule, RulePgg
 
+VARIANTS_COOPERATOR = [1, 3]
 
+VARIANTS_DEFECTOR = [0, 2]
 class Run:
     def __init__(self, pay=None):
         self.pay = pay
@@ -174,9 +176,10 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     common_pay = rule.factor * rule.pay * (n / t)
 
     # pago del individuo de interes; indice [r,r] del bloque
-    if individual == 1:
+    if individual in VARIANTS_COOPERATOR:
         # pago para cooperador
         individual_payoff = common_pay - rule.pay
+
     else:
         # pago para free rider
         individual_payoff = common_pay
