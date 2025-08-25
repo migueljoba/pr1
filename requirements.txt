@@ -2,4 +2,7 @@ numpy~=1.26.4
 matplotlib~=3.8.0
 plotly~=5.9.0
 kaleido~=0.2.1
-PyPDF2
+PyPDF2~=3.0.1
+pytest~=7.4.0
+pandas~=2.1.4
+pathlib~=1.0.1

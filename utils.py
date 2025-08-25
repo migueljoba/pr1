@@ -5,6 +5,8 @@ from rule import Rule, RulePgg
 VARIANTS_COOPERATOR = [1, 3]
 
 VARIANTS_DEFECTOR = [0, 2]
+
+
 class Run:
     def __init__(self, pay=None):
         self.pay = pay
@@ -150,6 +152,19 @@ def compute_payoff_with_rule(block: list, rule: Rule):
     return sum([rule.matrix[individual][neighbour] for neighbour in nblock.ravel()])
 
 
+def payoff_pgg(*, contribution: float, factor: float, total_coop: int, population: int) -> float:
+    if population <= 0:
+        raise ValueError("population debe ser > 0")
+    if not (0 <= total_coop <= population):
+        raise ValueError("total_coop debe estar entre 0 y population")
+    if contribution < 0:
+        raise ValueError("contribution debe ser ≥ 0")
+    if factor < 0:
+        raise ValueError("factor debe ser ≥ 0")
+
+    return (factor / population) * total_coop * contribution
+
+
 def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     if rule.pay is None:
         raise ValueError("Rule must have pay. None given.")
@@ -173,7 +188,7 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     n = np.sum(nblock == 1) + np.sum(nblock == 3)
 
     # pago que recibe cada individuo, independiente a estrategia
-    common_pay = rule.factor * rule.pay * (n / t)
+    common_pay = payoff_pgg(contribution=rule.pay, factor=rule.factor, total_coop=n, population=t)
 
     # pago del individuo de interes; indice [r,r] del bloque
     if individual in VARIANTS_COOPERATOR:

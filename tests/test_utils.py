@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 from numpy.random import RandomState
-
+import pytest
 import utils
 from rule import Rule, RulePgg
 
@@ -273,47 +273,47 @@ def test_compute_payoff_with_rule_pgg_when_cooperator():
 
     rule.factor = 1
     assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == 0
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == -0.11111111111111116
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == -0.2222222222222222
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == -0.33333333333333337
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == -0.4444444444444444
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == -0.5555555555555556
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.6666666666666667
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.7777777777777778
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.8888888888888888
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == pytest.approx(-0.11111111111111116)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == pytest.approx(-0.2222222222222222)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == pytest.approx(-0.33333333333333337)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.4444444444444444)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.5555555555555556)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.6666666666666667)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.7777777777777778)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.8888888888888888)
 
     rule.factor = 2
     assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == 1
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == 0.7777777777777777
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == 0.5555555555555556
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == 0.33333333333333326
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == 0.11111111111111116
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == -0.11111111111111116
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.33333333333333337
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.5555555555555556
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.7777777777777778
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == pytest.approx(0.7777777777777777)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == pytest.approx(0.5555555555555556)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == pytest.approx(0.33333333333333326)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == pytest.approx(0.11111111111111116)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.11111111111111116)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.33333333333333337)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.5555555555555556)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.7777777777777778)
 
     rule.factor = 3
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == 2
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == 1.6666666666666665
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == 1.3333333333333335
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == 1
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == 0.6666666666666667
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == 0.33333333333333326
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == 0
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.33333333333333337
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.6666666666666667
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == pytest.approx(2)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == pytest.approx(1.6666666666666665)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == pytest.approx(1.3333333333333335)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == pytest.approx(1)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == pytest.approx(0.6666666666666667)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(0.33333333333333326)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(0)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.33333333333333337)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.6666666666666667)
 
     rule.factor = 4
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == 3
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == 2.5555555555555554
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == 2.111111111111111
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == 1.6666666666666665
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == 1.2222222222222223
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == 0.7777777777777777
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == 0.33333333333333326
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.11111111111111116
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == -0.5555555555555556
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 1]], rule) == pytest.approx(3)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 1, 0]], rule) == pytest.approx(2.5555555555555554)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [1, 0, 0]], rule) == pytest.approx(2.111111111111111)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 1], [0, 0, 0]], rule) == pytest.approx(1.6666666666666665)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 1, 0], [0, 0, 0]], rule) == pytest.approx(1.2222222222222223)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(0.7777777777777777)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(0.33333333333333326)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.11111111111111116)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 1, 0], [0, 0, 0]], rule) == pytest.approx(-0.5555555555555556)
 
 
 def test_compute_payoff_with_rule_pgg_when_defector():
@@ -324,48 +324,48 @@ def test_compute_payoff_with_rule_pgg_when_defector():
     rule.radio = 1
 
     rule.factor = 1
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == 0.8888888888888888
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == 0.7777777777777778
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == 0.6666666666666666
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == 0.5555555555555556
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == 0.4444444444444444
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == 0.3333333333333333
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.2222222222222222
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.1111111111111111
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == pytest.approx(0.8888888888888888)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == pytest.approx(0.7777777777777778)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == pytest.approx(0.6666666666666666)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == pytest.approx(0.5555555555555556)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.4444444444444444)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.3333333333333333)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.2222222222222222)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.1111111111111111)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0)
 
     rule.factor = 2
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == 1.7777777777777777
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == 1.5555555555555556
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == 1.3333333333333333
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == 1.1111111111111112
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == 0.8888888888888888
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == 0.6666666666666666
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.4444444444444444
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.2222222222222222
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == pytest.approx(1.7777777777777777)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == pytest.approx(1.5555555555555556)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == pytest.approx(1.3333333333333333)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == pytest.approx(1.1111111111111112)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.8888888888888888)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.6666666666666666)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.4444444444444444)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.2222222222222222)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0)
 
     rule.factor = 3
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == 2.6666666666666665
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == 2.3333333333333335
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == 2
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == 1.6666666666666667
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == 1.3333333333333333
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == 1
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.6666666666666666
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.3333333333333333
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == pytest.approx(2.6666666666666665)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == pytest.approx(2.3333333333333335)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == pytest.approx(2)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == pytest.approx(1.6666666666666667)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == pytest.approx(1.3333333333333333)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(1)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.6666666666666666)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.3333333333333333)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0)
 
     rule.factor = 4
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == 3.5555555555555554
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == 3.111111111111111
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == 2.6666666666666665
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == 2.2222222222222223
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == 1.7777777777777777
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == 1.3333333333333333
-    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.8888888888888888
-    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0.4444444444444444
-    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == 0
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 1]], rule) == pytest.approx(3.5555555555555554)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], rule) == pytest.approx(3.111111111111111)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [1, 0, 0]], rule) == pytest.approx(2.6666666666666665)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 1], [0, 0, 0]], rule) == pytest.approx(2.2222222222222223)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [1, 0, 0], [0, 0, 0]], rule) == pytest.approx(1.7777777777777777)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 1], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(1.3333333333333333)
+    assert utils.compute_payoff_with_rule_pgg([[1, 1, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.8888888888888888)
+    assert utils.compute_payoff_with_rule_pgg([[1, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0.4444444444444444)
+    assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0)
 
 
 if __name__ == '__main__':
