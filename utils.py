@@ -124,6 +124,37 @@ def get_moore_neighbours(arrange: np.ndarray | list, i: int, j: int, r: int = 1)
     return window.tolist()
 
 
+def get_moore_neighbours_clip(arrange: np.ndarray | list, i: int, j: int, r: int = 1) -> list[list]:
+    """
+    Vecindad de Moore con bordes LIMITADOS alrededor de (i, j).
+    - arrange: np.ndarray 2D o list (se convierte internamente a ndarray)
+    - i, j: índices de fila y columna (deben estar dentro del arreglo)
+    - r: radio >= 0
+    Retorna: submatriz (lista de listas). Cerca de bordes, la ventana se recorta.
+    """
+    # Acepta list y lo convierte
+    if isinstance(arrange, list):
+        arrange = np.asarray(arrange)
+
+    if not isinstance(arrange, np.ndarray) or arrange.ndim != 2:
+        raise ValueError("'arrange' debe ser un np.ndarray 2D o list convertible a 2D")
+    if r < 0:
+        raise ValueError("r debe ser >= 0")
+
+    m, n = arrange.shape
+    if not (0 <= i < m and 0 <= j < n):
+        raise ValueError("(i, j) fuera de los límites del arreglo")
+
+    # Límites recortados (clip)
+    i0 = max(0, i - r)
+    i1 = min(m - 1, i + r)
+    j0 = max(0, j - r)
+    j1 = min(n - 1, j + r)
+
+    window = arrange[i0:i1 + 1, j0:j1 + 1]
+    return window.tolist()
+
+
 def compute_payoff(array, b: float):
     narray = np.array(array)
 

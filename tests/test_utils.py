@@ -183,6 +183,29 @@ def test_get_moore_neighbours_when_radio_2():
                   [36, 37, 38, 39, 40]]
 
 
+def test_get_moore_neighbours_clip():
+    n0 = utils.get_moore_neighbours_clip(np_regular_array, 0, 0)
+    assert n0 == [[0, 1], [7, 8]]
+
+    n1 = utils.get_moore_neighbours_clip(np_regular_array, 0, 6)
+    assert n1 == [[5, 6], [12, 13]]
+
+    n2 = utils.get_moore_neighbours_clip(np_regular_array, 3, 5)
+    assert n2 == [[18, 19, 20], [25, 26, 27], [32, 33, 34]]
+
+    n3 = utils.get_moore_neighbours_clip(np_regular_array, 6, 0)
+    assert n3 == [[35, 36], [42, 43]]
+
+    n4 = utils.get_moore_neighbours_clip(np_regular_array, 6, 6)
+    assert n4 == [[40, 41], [47, 48]]
+
+    n5 = utils.get_moore_neighbours_clip(np_regular_array, 0, 1)
+    assert n5 == [[0, 1, 2], [7, 8, 9]]
+
+    n6 = utils.get_moore_neighbours_clip(np_regular_array, 6, 1)
+    assert n6 == [[35, 36, 37], [42, 43, 44]]
+
+
 def test_compute_payoff_when_full_0():
     arr0 = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
     p = utils.compute_payoff(arr0, 1)
