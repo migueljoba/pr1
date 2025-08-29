@@ -48,7 +48,7 @@ class RulePgg:
                 f"{self.tolerance},{self.info_seed},{self.info_generations}")
 
     def params_str(self):
-        return f"dim{self.sides}-prob-d{self.prob_defector}c{self.prob_cooperator}-radio{self.radio}-pay{self.pay}-factor{self.factor}-tol{self.tolerance}"
+        return f"dim{self.sides}-prob-d{self.prob_defector}c{self.prob_cooperator}-radio{self.radio}-pay{self.pay}-factor{self.factor:.1f}-tol{self.tolerance:02d}"
 
     @staticmethod
     def csv_headers():

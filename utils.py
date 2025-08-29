@@ -188,6 +188,7 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
     n = np.sum(nblock == 1) + np.sum(nblock == 3)
 
     # pago que recibe cada individuo, independiente a estrategia
+    # common_pay = rule.factor * rule.pay * (n / t)
     common_pay = payoff_pgg(contribution=rule.pay, factor=rule.factor, total_coop=n, population=t)
 
     # pago del individuo de interes; indice [r,r] del bloque
