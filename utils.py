@@ -299,15 +299,18 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
                 # % pago tolerable. Conservar estrategia
                 current_step[idx_i, idx_j] = rule.transition[estado_previo][estado_previo]
 
-            else:
-                # % pago no tolerable. Cambiar a estrategia desertora
-                if estado_previo == 1:
-                    current_step[idx_i, idx_j] = rule.transition[estado_previo][0]
+            elif payoff > 0:
+                # % pago no tolerable pero todavía positivo. Cambiar a estrategia desertora
+                # sin importar estado previo
+                current_step[idx_i, idx_j] = rule.transition[estado_previo][0]
 
-                # else:
-                # comentar D -> C, o
-                # agregar probabilidad para convertir
-                # current_step[idx_i, idx_j] = 1
+            else:
+                if estado_previo in VARIANTS_COOPERATOR:
+                    current_step[idx_i, idx_j] = rule.transition[estado_previo][0]
+                elif estado_previo in VARIANTS_DEFECTOR:
+                    current_step[idx_i, idx_j] = rule.transition[estado_previo][1]
+                # El bug es que si el pago es cero, y es cooperador, siempre se mantiene cooperador
+
 
         # si paso actual y anterior son iguales, asumir que ya habrá evolución y terminar simulación
         if np.all(previous_step == current_step):
