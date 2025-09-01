@@ -41,10 +41,15 @@ def generate_payoff_array_pgg(population, rule: RulePgg):
     for idx_i, idx_j in np.ndindex(population.shape):
         # obtener vecinos
         # neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j) # se mantiene para verificar validez de vecindad de Moore con radio = 1
-        neighbours = get_moore_neighbours(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
+
+        if rule.border:
+            neighbours = get_moore_neighbours_clip(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
+        else:
+            neighbours = get_moore_neighbours(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
 
         # % calcular pago para el individuo
-        payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule)
+        individual = population[idx_i, idx_j]
+        payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule, individual)
 
     return payoff_array
 
@@ -196,7 +201,7 @@ def payoff_pgg(*, contribution: float, factor: float, total_coop: int, populatio
     return (factor / population) * total_coop * contribution
 
 
-def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
+def compute_payoff_with_rule_pgg(block: list, rule: RulePgg, individual: int = None):
     if rule.pay is None:
         raise ValueError("Rule must have pay. None given.")
     if rule.tolerance is None:
@@ -204,15 +209,21 @@ def compute_payoff_with_rule_pgg(block: list, rule: RulePgg):
 
     nblock = np.array(block)
 
-    # control de tamano de vecindad
-    required_shape = 2 * rule.radio + 1
-    if nblock.shape != (required_shape, required_shape):
-        raise ValueError(f"array must be of shape ({required_shape},{required_shape})")
-    else:
-        # elemento central en una vecindad de Moore. Sus coorenadas relativas siempre son (r, r)
-        individual = nblock[rule.radio, rule.radio]
+    if not rule.border:
+        # control de tamano de vecindad, si no existen bordes
+        required_shape = 2 * rule.radio + 1
 
-    # total de individuos
+        if nblock.shape != (required_shape, required_shape):
+            raise ValueError(f"array must be of shape ({required_shape},{required_shape})")
+        else:
+            # elemento central en una vecindad de Moore. Sus coorenadas relativas siempre son (r, r)
+            individual = nblock[rule.radio, rule.radio]
+
+    else:
+        # sí existe borde en la regla
+        pass
+
+    # total de individuos en el bloque
     t = nblock.size
 
     # total de cooperadores en el bloque. Cooperadores son valores 1 y 3
@@ -332,7 +343,7 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
 
             else:
                 # % pago no tolerable. Cambiar a estrategia desertora
-                if estado_previo == 1:
+                if estado_previo in VARIANTS_COOPERATOR:
                     current_step[idx_i, idx_j] = rule.transition[estado_previo][0]
 
                 # else:

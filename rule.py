@@ -10,6 +10,7 @@ class RulePgg:
     def __init__(self, pay=None):
         self.pay = pay
         self.tolerance = None
+        self.border = False
 
         # transicion de dos estados, por defecto
         self.transition = [
