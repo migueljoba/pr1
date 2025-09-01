@@ -6,11 +6,12 @@ import os
 """
 Generador de gráfico interactivo de frecuencias, a partir de datos generados previamente
 """
-
+# especificar dimension de matriz de poblacion
+dim = 15
 
 # Ruta y carga de archivos
 script_dir = os.path.dirname(os.path.abspath(__file__))
-files = sorted(glob.glob(os.path.join(script_dir, 'frequency/*.csv')))
+files = sorted(glob.glob(os.path.join(script_dir, f'frequency/dim{dim}*.csv')))
 
 if not files:
     raise FileNotFoundError(f"No se encontraron archivos dentro de {script_dir}")

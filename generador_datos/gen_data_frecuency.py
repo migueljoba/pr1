@@ -11,11 +11,8 @@ import utils_file
 from rule import RulePgg
 
 
-def simulate(rule: RulePgg, evolution: bool = True, frequency: bool = True, payment: bool = True):
+def simulate(rule: RulePgg, initial_population, evolution: bool = True, frequency: bool = True, payment: bool = True):
     print(f"Factor: {rule.factor}, Tolerancia: {rule.tolerance}")
-
-    # % generar poblacion inicial
-    initial_population = utils.random_population([0, 1], [0.2, 0.8], (rule.sides, rule.sides))
 
     # % ejecutar juego(poblacion inicial, regla, generaciones)
     matrix_result = utils.run_pgg(initial_population, rule, rule.generations, stop_when_all=0)
@@ -26,7 +23,7 @@ def simulate(rule: RulePgg, evolution: bool = True, frequency: bool = True, paym
 
     rule_identifier = f"dim{rule.sides}-p{rule.pay}-r{rule.factor}-tol{rule.tolerance:03d}"
 
-    directory = f"./evolution/{rule_identifier}"  # ruta relativa al utilitario
+    directory = f"./evolution/{rule_identifier}"  # ruta relativa a este script
 
     # Exportar mapa de evolución
     if evolution:
@@ -54,10 +51,13 @@ for factor in utils.custom_range(1, 5, step=1):
         rule.factor = factor
         rule.tolerance = tol
 
-        rule.sides = 31
+        rule.sides = 45
         rule.generations = 50
 
+        initial_population = utils.random_population([0, 1], [0.2, 0.8], (rule.sides, rule.sides))
+
         simulate(rule,
+                 initial_population,
                  evolution=False,
                  frequency=True,
                  payment=False)

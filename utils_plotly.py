@@ -63,10 +63,13 @@ def plot_histogram_from_csv(
         column_name: str,
         save_html: str | Path | None = None,
         separator: str = ",",
-        encoding: str = "utf-8"
+        encoding: str = "utf-8",
+        out_summary_csv: str | Path | None = None,
+        assume_integers: bool = True
 ):
     """
     Crea un histograma de frecuencias para la columna especificada de un CSV.
+    Además, puede generar un CSV resumido con columnas: value,count.
 
     Args:
         path_csv: Ruta al archivo CSV.
@@ -74,6 +77,8 @@ def plot_histogram_from_csv(
         save_html: Si se indica, guarda el gráfico como HTML interactivo.
         separator: Separador del CSV (default: ',').
         encoding: Encoding del archivo (default: 'utf-8').
+        out_summary_csv: Ruta para guardar el CSV resumido (opcional).
+        assume_integers: Convierte a int antes de contar (default: True).
     """
     path = Path(path_csv)
     if not path.exists():
@@ -82,25 +87,37 @@ def plot_histogram_from_csv(
     df = pd.read_csv(path, sep=separator, encoding=encoding)
 
     if column_name not in df.columns:
-        raise ValueError(f"La columna '{column_name}' no existe en el CSV. Columnas: {list(df.columns)}")
+        raise ValueError(
+            f"La columna '{column_name}' no existe en el CSV. Columnas: {list(df.columns)}"
+        )
 
-    # Convertir a numérico
-    x = pd.to_numeric(df[column_name], errors="coerce").dropna()
-    if x.empty:
-        raise ValueError(f"La columna '{column_name}' no contiene valores numéricos válidos.")
+    s = pd.to_numeric(df[column_name], errors="coerce").dropna()
+    if s.empty:
+        raise ValueError(
+            f"La columna '{column_name}' no contiene valores numéricos válidos."
+        )
 
-    fig = px.histogram(
-        df,
-        x=column_name,
-        text_auto=True,
-        title=f"{path_csv}: {column_name}",
-        labels={column_name: column_name, "count": "Ocurrencias"}
+    # resumen value,count
+    x = s.to_numpy()
+    if assume_integers:
+        x = x.astype(int)
+    vc = pd.Series(x).value_counts().sort_index()
+    summary_df = pd.DataFrame({"value": vc.index, "count": vc.values})
+
+    if out_summary_csv:
+        summary_df.to_csv(out_summary_csv, index=False)
+
+    # gráfico desde el resumen
+    fig = px.bar(
+        summary_df,
+        x="value",
+        y="count",
+        text="count",
+        title=f"{path_csv}: {column_name} (discreto)",
+        labels={"value": column_name, "count": "Ocurrencias"},
     )
-
-    fig.update_layout(
-        bargap=0.1,
-        template="plotly_white"
-    )
+    fig.update_traces(textposition="outside")
+    fig.update_layout(bargap=0.1, template="plotly_white")
 
     if save_html:
         out = Path(save_html)
