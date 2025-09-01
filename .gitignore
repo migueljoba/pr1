@@ -1,3 +1,7 @@
 \.
 .ipynb_checkpoints
 .pruebas_plotly
+data_source
+generador_datos/data
+resultado
+generador_datos/frequency
