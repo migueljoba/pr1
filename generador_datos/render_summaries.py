@@ -11,14 +11,6 @@ from typing import Iterable, Optional
 # Prefijo parametrizable
 PREFIX = "summary-"
 
-
-def _get_all_csv_files(dir: Path):
-    csv_files = sorted(p for p in dir.iterdir() if p.is_file() and p.suffix == '.csv')
-    if not csv_files:
-        raise FileNotFoundError(f"No se encontraron CSV en {dir}")
-    return csv_files
-
-
 # Patrón base
 PATTERN = re.compile(
     rf"^{PREFIX}"
@@ -75,13 +67,12 @@ def filter_files(
 if __name__ == '__main__':
     BASE_DIR = Path(__file__).resolve().parent
     SOURCE_DIR = BASE_DIR / 'simulations' / 'summaries'
-    # files = _get_all_csv_files(SOURCE_DIR)
+
     files = uf.get_all_csv_files(SOURCE_DIR)
-    # files = ["summary-dim10-prob-d0.2c0.8-radio1-pay1-factor2.5-tol05.csv"]
-    files = filter_files(files, dim=40)
+    # files = filter_files(files, tol=0)
 
     total = len(files)
-    cols = 5
+    cols = 3
     rows = ceil(total / cols)
 
     fig = make_subplots(rows=rows, cols=cols,
@@ -93,13 +84,13 @@ if __name__ == '__main__':
         # Agregar barras al subplot (fila=1, col=1)
         row = idx // cols + 1
         col = idx % cols + 1
-        fig.add_trace(go.Bar(x=df["value"], y=df["count"], name="A", text=df["count"]),
+        fig.add_trace(go.Bar(x=df["value"], y=df["count"], text=df["count"]),
                       row=row, col=col)
 
     fig.update_xaxes(range=[0, 50])
     # fig.update_yaxes(range=[0, 2000])
 
-    fig.update_layout(title_text="Ejemplo de Subplots con Plotly",
+    fig.update_layout(title_text="Histogramas",
                       # font=dict(family="Latin Modern Roman", size=14, color="black"),
                       # plot_bgcolor="white",
                       # paper_bgcolor="white",
