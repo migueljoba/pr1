@@ -1,5 +1,7 @@
 import csv
 import os
+from pathlib import Path
+
 import numpy as np
 
 
@@ -52,6 +54,13 @@ def export_evolution_csv(data, directory, fileprefix):
         # Guarda el ndarray como CSV
         np.savetxt(filepath, arr, fmt='%d', delimiter=',')
         # Puedes usar fmt='%d' porque son solo 0 y 1
+
+
+def get_all_csv_files(dir: Path):
+    csv_files = sorted(p for p in dir.iterdir() if p.is_file() and p.suffix == '.csv')
+    if not csv_files:
+        raise FileNotFoundError(f"No se encontraron CSV en {dir}")
+    return csv_files
 
 
 if __name__ == "__main__":
