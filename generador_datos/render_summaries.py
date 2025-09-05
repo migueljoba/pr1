@@ -85,7 +85,7 @@ if __name__ == '__main__':
     rows = ceil(total / cols)
 
     fig = make_subplots(rows=rows, cols=cols,
-                        subplot_titles=[f"Gráfico {i + 1}" for i in range(total)])
+                        subplot_titles=[uf.parse_filename(f.name)['str'] for f in files])
 
     for idx, f in enumerate(files):
         df = pd.read_csv(f)
