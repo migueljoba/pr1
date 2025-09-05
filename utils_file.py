@@ -1,5 +1,6 @@
 import csv
 import os
+import re
 from pathlib import Path
 
 import numpy as np
@@ -63,8 +64,46 @@ def get_all_csv_files(dir: Path):
     return csv_files
 
 
-if __name__ == "__main__":
-    # Crear algunos datos de ejemplo
-    data = [np.random.randint(0, 2, size=(5, 5)), np.random.randint(0, 2, size=(3, 7))]
-    export_evolution_csv(data, "resultados", "poblacion_")
-    print("¡Archivos exportados!")
+PREFIX_SUMMARY = "summary"  # configurable
+
+# Patrón completo con grupos nombrados
+PATTERN_PARSER_FILENAME = re.compile(
+    rf"^{PREFIX_SUMMARY}-"
+    r"dim(?P<dim>\d+)-"
+    r"prob-d(?P<prob_d>\d\.\d)c(?P<prob_c>\d\.\d)-"
+    r"radio(?P<radio>\d+)-"
+    r"pay(?P<pay>\d+)-"
+    r"factor(?P<factor>\d\.\d)-"
+    r"tol(?P<tol>\d{2})\.csv$"
+)
+
+
+def parse_filename(filename: str | Path) -> dict[str, str]:
+    """
+    Extrae los valores numéricos de un nombre de archivo con el patrón definido.
+
+    Retorna un diccionario con claves:
+    dim, prob-d, prob-c, radio, pay, factor, tol
+    """
+    name = filename.name if isinstance(filename, Path) else filename
+    m = PATTERN_PARSER_FILENAME.match(name)
+    if not m:
+        raise ValueError(f"Nombre de archivo inválido: {name}")
+
+    dim = int(m.group("dim"))
+    prob_d = float(m.group("prob_d"))
+    prob_c = float(m.group("prob_c"))
+    radio = int(m.group("radio"))
+    pay = float(m.group("pay"))
+    factor = float(m.group("factor"))
+    tol = int(m.group("tol"))
+    return {
+        "dim": dim,
+        "prob-d": prob_d,
+        "prob-c": prob_c,
+        "radio": radio,
+        "pay": pay,
+        "factor": factor,
+        "tol": tol,
+        "str": f"{dim=}, {factor=}, {tol=}",
+    }
