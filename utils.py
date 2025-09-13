@@ -311,7 +311,7 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
 
 
 def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
-            stop_when_all: list | int = None, stop_when_undetermined: bool = False) -> dict:
+            stop_when_all: list | int = None) -> dict:
     matrix_list = [initial_population]
     payoff_list = []
     # generations = rule.generations
@@ -360,7 +360,7 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
 
         matrix_list.append(current_step)
 
-        if stop_when_undetermined and np.all(previous_step == current_step):
+        if rule.info_undetermined and np.all(previous_step == current_step):
             # si paso actual y anterior son iguales, asumir que ya no habrá evolución y terminar simulación
             undetermined = True
             break
