@@ -311,10 +311,13 @@ def run(initial_population: np.ndarray, rule: Rule, generations: int, verbose: b
 
 
 def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, verbose: bool = False,
-            stop_when_all: list | int = None, stop_when_repeat: int = None) -> dict:
+            stop_when_all: list | int = None, stop_when_undetermined: bool = False) -> dict:
     matrix_list = [initial_population]
     payoff_list = []
     # generations = rule.generations
+
+    # bandera para indicar que no se determina nro de generaciones neccesarias para colapsar
+    undetermined = False
 
     # % iterar generaciones
     for gen in range(generations - 1):
@@ -337,7 +340,11 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
             estado_previo = previous_step[idx_i][idx_j]
 
             # % tolerancia: evaluar estrategia segun el pago obtenido
-            if payoff >= rule.pay * (1 - (rule.tolerance / 100)):
+            if payoff >= 0:
+                # gana o empata. Mantener estrategia
+                current_step[idx_i, idx_j] = rule.transition[estado_previo][estado_previo]
+
+            elif payoff >= - (rule.tolerance / 100):
                 # % pago tolerable. Conservar estrategia
                 current_step[idx_i, idx_j] = rule.transition[estado_previo][estado_previo]
 
@@ -351,18 +358,18 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
                 # agregar probabilidad para convertir
                 # current_step[idx_i, idx_j] = 1
 
-        # si paso actual y anterior son iguales, asumir que ya habrá evolución y terminar simulación
-        if np.all(previous_step == current_step):
-            # break
-            pass  # TODO detener simulacion cuando las matrices ya no evolucionen
-
         matrix_list.append(current_step)
+
+        if stop_when_undetermined and np.all(previous_step == current_step):
+            # si paso actual y anterior son iguales, asumir que ya no habrá evolución y terminar simulación
+            undetermined = True
+            break
 
         if stop_when_all is not None and np.all(np.isin(current_step, stop_when_all)):
             # detener simulacion cuando todos los individuos tengan un valor especifico
             break
 
-    return {'matrix_list': matrix_list, 'payoff_list': payoff_list}
+    return {'matrix_list': matrix_list, 'payoff_list': payoff_list, 'undetermined': undetermined}
 
 
 def custom_range(start, stop, step=1):
