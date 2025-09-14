@@ -11,13 +11,13 @@ import utils
 from rule import RulePgg
 
 
-def run(rule: RulePgg):
+def run(rule: RulePgg, seeds: [int]) -> np.array:
     # numero maximo de generaciones
     generations = 50
 
     csv_info_list = []
 
-    for n in range(0, 2000):
+    for n in range(seeds[0], seeds[1]):
         rule.info_seed = n
 
         initial_population = utils.random_population(
@@ -43,6 +43,7 @@ def run(rule: RulePgg):
         # plot.show()
 
         rule.info_generations = len(matrix_list['matrix_list']) - 1
+        rule.status_undetermined = matrix_list.get('undetermined')
         print(rule.csv_row())
         csv_info_list.append(rule.csv_row())
 
@@ -55,14 +56,15 @@ def run(rule: RulePgg):
             f.write(",".join(rule.csv_headers()) + "\n")
         np.savetxt(f, csv_info_list, delimiter=",", fmt="%s")
 
+    print(f"Geneardo: {file_name}")
+
 
 if __name__ == '__main__':
-    factors_all = [1, 1.5]
-    dimensiones = [20]
+    factors_all = [1.6]
+    dimensiones = [10]
     factores = factors_all
     tolerancias = [0]
-
-    # definir la regla de juego
+    seeds = [0, 2000]
 
     for dim in dimensiones:
         for fact in factores:
@@ -70,10 +72,11 @@ if __name__ == '__main__':
                 rule = RulePgg()
                 # rule.use_3s_transition()
                 rule.sides = dim
-                rule.population_prob(c=0.8, d=0.2)
+                rule.population_prob(c=0.7, d=0.3)
                 rule.radio = 1
                 rule.pay = 1
                 rule.factor = fact
                 rule.tolerance = tol
+                rule.stop_when_undetermined = True
 
-                run(rule)
+                run(rule, seeds=seeds)
