@@ -34,7 +34,8 @@ class RulePgg:
 
         self.info_generations = None
 
-        self.info_undetermined = False
+        self.stop_when_undetermined = False
+        self.status_undetermined = False
 
         self.prob_cooperator = None
 
@@ -48,7 +49,7 @@ class RulePgg:
 
     def csv_row(self):
         return (f"{self.sides},{self.prob_defector},{self.prob_cooperator},{self.radio},{self.pay},{self.factor},"
-                f"{self.tolerance},{self.info_seed},{self.info_generations},{self.info_undetermined}")
+                f"{self.tolerance},{self.info_seed},{self.info_generations},{self.status_undetermined}")
 
     def params_str(self):
         return f"dim{self.sides}-prob-d{self.prob_defector}c{self.prob_cooperator}-radio{self.radio}-pay{self.pay}-factor{self.factor:.1f}-tol{self.tolerance:02d}"
@@ -56,7 +57,7 @@ class RulePgg:
     @staticmethod
     def csv_headers():
         return ["sides", "defector", "cooperator", "radio", "pay", "factor", "tolerance", "info_seed",
-                "info_generations", "undetermined"]
+                "info_generations", "status_undetermined"]
 
     def population_prob(self, *, c: float, d: float):
         if c + d != 1:
