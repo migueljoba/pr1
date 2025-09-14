@@ -360,13 +360,13 @@ def run_pgg(initial_population: np.ndarray, rule: RulePgg, generations: int, ver
 
         matrix_list.append(current_step)
 
-        if rule.info_undetermined and np.all(previous_step == current_step):
-            # si paso actual y anterior son iguales, asumir que ya no habrá evolución y terminar simulación
-            undetermined = True
-            break
-
         if stop_when_all is not None and np.all(np.isin(current_step, stop_when_all)):
             # detener simulacion cuando todos los individuos tengan un valor especifico
+            break
+
+        if rule.stop_when_undetermined and np.all(previous_step == current_step):
+            # si paso actual y anterior son iguales, asumir que ya no habrá evolución y terminar simulación
+            undetermined = True
             break
 
     return {'matrix_list': matrix_list, 'payoff_list': payoff_list, 'undetermined': undetermined}
