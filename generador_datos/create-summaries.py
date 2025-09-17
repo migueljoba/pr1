@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+
 import pandas as pd
 
 # --- Configuración ---
@@ -38,9 +39,8 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     csv_files = sorted(
-        p for p in INPUT_DIR.iterdir()
+        p for p in INPUT_DIR.rglob("*.csv")
         if p.is_file()
-        and p.suffix.lower() == ".csv"
         and not p.name.startswith(OUTPUT_PREFIX)  # evita re-procesar resúmenes
     )
 
