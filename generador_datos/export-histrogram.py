@@ -28,8 +28,8 @@ def std_weighted(values, counts):
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-summaries_dir = Path(os.path.join(script_dir, "simulations", "summaries"))
-output_dir = Path(os.path.join(script_dir, "simulations", "images"))
+summaries_dir = Path(os.path.join(script_dir, "summaries"))
+output_dir = Path(os.path.join(script_dir, "histograms"))
 
 csv_files = sorted(p for p in summaries_dir.iterdir() if p.is_file() and p.suffix.lower() == ".csv")
 

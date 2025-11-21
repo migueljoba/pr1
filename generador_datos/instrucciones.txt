@@ -3,19 +3,19 @@
 >> generador_datos/simulador_a_csv.py
 
 Ejemplo de archivo generado:
-generador_datos/simulations/dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.csv
+generador_datos/simulations/dim10/dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.csv
 
 ```
-sides,defector,cooperator,radio,pay,factor,tolerance,info_seed,info_generations
-50,0.2,0.8,1,1,2.5,0,0,4
-50,0.2,0.8,1,1,2.5,0,1,4
+sides,defector,cooperator,radio,pay,factor,tolerance,info_seed,info_generations,status_undetermined
+50,0.2,0.8,1,1,2.5,0,0,4,False
+50,0.2,0.8,1,1,2.5,0,1,4,False
 ```
 
 
 # 2 - Generar un resumen por cada conjunto de simulaciones, cuyos datos
 # se utilizan para crear una gráfico de barras que emula un histograma
 
->> generador_datos/simulations/create-summaries.py
+>> generador_datos/create-summaries.py
 
 Ejemplo de archivo generado:
 generador_datos/simulations/summaries/summary-dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.csv
@@ -34,4 +34,18 @@ value,count
 >> generador_datos/export-histrogram.py
 
 Ejemplo de archivo generado:
-generador_datos/simulations/images/summary-dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.pdf
+generador_datos/histograms/summary-dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.pdf
+
+
+
+# 4 - Conjunto de gráficos de resumen, tipo histograma
+# Requiere de ejecución de #2.
+# Permite graficar en una sola vista una grilla de gráficos, especificando dim, factor y tol
+>> render_summaries.py
+
+Renderiza gráficos en el navegador
+
+
+
+# 5 Para verificar el contenido de las simulaciones
+check_simulations.py
