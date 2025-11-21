@@ -5,6 +5,8 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 
+import utils_file as uf
+
 """
 Generar gráficos en formato PDF masivamente para los CSV de resumen de frecuencias
 dentro del directorio pr1/generador_datos/simulations/sumaries
@@ -45,28 +47,44 @@ for file in csv_files:
     mean_val = mean_weighted(values, counts)
     std_val = std_weighted(values, counts)
 
+    # parsear parametros a partir del nombre del archivo
+    title = f"{uf.parse_filename(file.name).get('str')}"
+
     # === Crear gráfico con Plotly ===
     fig = px.bar(df, x="value", y="count",
-                 labels={"value": "Valor (generaciones)", "count": "Frecuencia"},
-                 title="Distribución de info_generations")
+                 labels={"value": "Generaciones", "count": "Frecuencia"},
+                 title=title,
+                 # text='count' # agrega valor a cada barra
+                 )
+
+    # fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
 
     # Agregar líneas de referencia
-    fig.add_vline(x=mean_val, line_dash="dash", line_color="red",
-                  annotation_text=f"Media={mean_val:.2f}", annotation_position="top left", fillcolor="red")
+    # Linea de Media
+    fig.add_vline(x=mean_val,
+                  line_dash="dash",  # opciones: "solid","dot","dash","longdash","dashdot","longdashdot"
+                  line_color="black",
+                  annotation_text=f"Media={mean_val:.2f}", annotation_position="top", fillcolor="red")
 
-    fig.add_vline(x=mean_val - std_val, line_dash="dot", line_color="green", annotation_text="-1σ",
-                  annotation_position="bottom left")
-
-    fig.add_vline(x=mean_val + std_val, line_dash="dot", line_color="green", annotation_text="+1σ",
-                  annotation_position="bottom right")
+    # varianzas o desviacion estandar?
+    # fig.add_vline(x=mean_val - std_val, line_dash="dot", line_color="green", annotation_text="-1σ", annotation_position="bottom left")
+    # fig.add_vline(x=mean_val + std_val, line_dash="dot", line_color="green", annotation_text="+1σ", annotation_position="bottom right")
 
     fig.update_xaxes(range=[0, 50])
 
-    # === Guardar como SVG o PDF ===
+    # Cambiar la tipografía:
+    fig.update_layout(
+        font=dict(
+            family="LMRoman10",  # "Latin Modern Roman",
+            size=14
+        )
+    )
+
+    # === Guardar como SVG o PDF cambiando la extensión
     # Requiere instalar kaleido una sola vez:  pip install -U kaleido
     output_dir.mkdir(parents=True, exist_ok=True)
 
     fig.write_image(os.path.join(output_dir, f"{file.stem}.pdf"))
-    # fig.write_image("histograma2.pdf")
-    # fig.show()
+    fig.write_image(os.path.join(output_dir, f"{file.stem}.svg"))
+
     print(f"Archivo '{file.stem}.pdf' generado.")
