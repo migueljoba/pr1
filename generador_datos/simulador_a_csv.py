@@ -60,21 +60,28 @@ def run(rule: RulePgg, seeds: [int]) -> np.array:
 
 
 if __name__ == '__main__':
-    factors_all = [2.5]
-    dimensiones = [50]
-    factores = factors_all
-    # r: 1.5    [12, 23, 34, 45, 56, 67, 78, 89]
-    # r: 2.0    [0, 12, 34, 56, 78]
-    # r: 2.5    [0, 17, 45, 73]
-    # r: 3.0    [0, 34, 67]
-    # r: 3.5    [0, 23, 62]
-    tolerancias = [45]
-
+    dimensiones = [90]
+    factores = [1.5]
     seeds = [0, 2000]
+    tolerancias_r = {
+        "1.0": [0, 12, 23, 34, 45, 56, 67, 78, 89],
+        "1.1": [0, 3, 15, 27, 39, 52, 64, 76, 88],
+        "1.2": [0, 7, 20, 34, 47, 60, 74, 87],
+        "1.3": [0, 14, 28, 43, 57, 72, 86],
+        "1.4": [0, 7, 23, 38, 54, 69, 85],
+        "1.5": [0, 17, 34, 51, 67, 84],
+        "2.0": [0, 12, 34, 56, 78],
+        "2.5": [0, 17, 45, 73],
+        "3.0": [0, 34, 67],
+        "3.5": [0, 23, 62]
+    }
 
     # INTENTAR ACOTAR VALORES DE R, PROPONIENDO UN VALOR R TAL QUE EL PAGO SEA CERO, CON EL PEOR ESCENARIO PARA UN COOPERADOR: NC=1
     for dim in dimensiones:
         for fact in factores:
+
+            tolerancias = tolerancias_r.get(str(fact))
+
             for tol in tolerancias:
                 rule = RulePgg()
                 # rule.use_3s_transition()
