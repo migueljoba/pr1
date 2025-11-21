@@ -7,7 +7,7 @@ import pandas as pd
 # Directorio de entrada: por defecto, el mismo donde está este script
 BASE_DIR = Path(__file__).resolve().parent
 
-# Directorio de salida (se creará si no existe)
+# Directorio de entrada
 INPUT_DIR = BASE_DIR / "simulations"
 
 # Directorio de salida (se creará si no existe)
@@ -22,6 +22,11 @@ def summarize_info_generations(csv_path: Path) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
     if "info_generations" not in df.columns:
         raise ValueError(f"Falta columna 'info_generations' en: {csv_path.name}")
+
+    # df = df[df["status_undetermined"] == False]
+
+    # Sobrescribir info_generations con 49 donde status_undetermined == True
+    df.loc[df["status_undetermined"] == True, "info_generations"] = 49
 
     # Asegurar numérico y eliminar NaN
     s = pd.to_numeric(df["info_generations"], errors="coerce").dropna().astype(int)
