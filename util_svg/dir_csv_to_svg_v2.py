@@ -3,11 +3,6 @@ import csv
 from pathlib import Path
 import sys
 
-"""
-This script converts a directory of SVG files into a SVG file.
-Use with tester_pgg.py script, with export_evolution flag set to True
-"""
-
 # ==============================
 # CONFIGURACIÓN EDITABLE
 # ==============================
@@ -30,6 +25,12 @@ STROKE_COLOR = "#000000"  # color del borde de las celdas
 STROKE_WIDTH = 1  # ancho del borde (0.0 = sin borde)
 
 DELIMITER = ","  # delimitador del CSV ("," o ";" por ejemplo)
+
+# Área de texto inferior (etiqueta con el nombre del archivo CSV)
+LABEL_FONT_FAMILY = "monospace"           # fuente del texto
+LABEL_FONT_SIZE = 14                      # tamaño de fuente en px
+LABEL_MARGIN_LEFT = 5                     # margen desde el borde izquierdo
+LABEL_MARGIN_TOP = 5                      # separación entre la cuadrícula y el texto
 
 
 def leer_csv(path_csv, delimiter=","):
@@ -59,12 +60,26 @@ def leer_csv(path_csv, delimiter=","):
     return datos
 
 
-def generar_svg(datos, cell_size, color0, color1, stroke_color, stroke_width):
+def generar_svg(
+    datos,
+    cell_size,
+    color0,
+    color1,
+    stroke_color,
+    stroke_width,
+    label_text: str,
+):
     filas = len(datos)
     cols = len(datos[0])
 
-    width = cols * cell_size
-    height = filas * cell_size
+    grid_width = cols * cell_size
+    grid_height = filas * cell_size
+
+    # Altura adicional para el texto inferior
+    label_area_height = LABEL_FONT_SIZE + LABEL_MARGIN_TOP + 5  # un pequeño margen extra
+
+    width = grid_width
+    height = grid_height + label_area_height
 
     svg_lineas = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -84,6 +99,7 @@ def generar_svg(datos, cell_size, color0, color1, stroke_color, stroke_width):
         base_style.append("stroke:none")
     base_style_str = ";".join(base_style)
 
+    # Rectángulos de la cuadrícula
     for y, fila in enumerate(datos):
         for x, val in enumerate(fila):
             color = color1 if val == 1 else color0
@@ -95,6 +111,18 @@ def generar_svg(datos, cell_size, color0, color1, stroke_color, stroke_width):
                 f'style="fill:{color};{base_style_str}" />'
             )
 
+    # Texto con el nombre del archivo CSV, debajo de la cuadrícula
+    text_x = LABEL_MARGIN_LEFT
+    text_y = grid_height + LABEL_MARGIN_TOP + LABEL_FONT_SIZE  # baseline del texto
+    svg_lineas.append(
+        f'  <text x="{text_x}" y="{text_y}" '
+        f'font-family="{LABEL_FONT_FAMILY}" '
+        f'font-size="{LABEL_FONT_SIZE}px" '
+        f'fill="#000000">'
+        f'{label_text}'
+        f'</text>'
+    )
+
     svg_lineas.append("</svg>")
     return "\n".join(svg_lineas)
 
@@ -102,6 +130,10 @@ def generar_svg(datos, cell_size, color0, color1, stroke_color, stroke_width):
 def procesar_csv(csv_path: Path, output_dir: Path):
     try:
         datos = leer_csv(csv_path, delimiter=DELIMITER)
+
+        # Usamos el nombre del archivo (incluyendo .csv) como etiqueta
+        label_text = csv_path.stem
+
         svg_contenido = generar_svg(
             datos=datos,
             cell_size=CELL_SIZE,
@@ -109,6 +141,7 @@ def procesar_csv(csv_path: Path, output_dir: Path):
             color1=COLOR1,
             stroke_color=STROKE_COLOR,
             stroke_width=STROKE_WIDTH,
+            label_text=label_text,
         )
 
         output_path = output_dir / (csv_path.stem + ".svg")
