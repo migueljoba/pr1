@@ -12,7 +12,11 @@ Use with tester_pgg.py script, with export_evolution flag set to True
 # CONFIGURACIÓN EDITABLE
 # ==============================
 # Directorio que contiene los CSV de entrada
-INPUT_DIR = "../generador_datos/evolution/prueba"
+sides = 40
+factor = 1.3
+tolerance = 28
+dir_name = f'{sides}-{factor}-{tolerance}'
+INPUT_DIR = f"../generador_datos/evolution/{dir_name}"
 
 # Directorio donde se guardarán los SVG generados.
 # Si es None, se usan los mismos directorios donde están los CSV.

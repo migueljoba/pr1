@@ -9,29 +9,24 @@ from rule import RulePgg
 # definir la regla de juego
 rule = RulePgg()
 # rule.use_3s_transition()
-rule.sides = 10
-rule.population_prob(c=0.7, d=0.3)
+rule.sides = 40
+rule.population_prob(c=0.8, d=0.2)
 rule.radio = 1
 rule.pay = 1
-rule.factor = 1.6
-rule.tolerance = 0
+rule.factor = 1.3
+rule.tolerance = 28
 rule.border = False
 rule.stop_when_undetermined = True
 # numero de generaciones
 generations = 50
 
-
-ESTOY TRABAJANDO EN DETENER LA SIMULACION CUANDO LA POBLACION YA NO EVOLUCIONA. PARECE FUNCIONAR BIEN. HICE REFACTOR DE NOMBRE
-DE VARIABLE Y FIX DE BUG QUE CONFUNDE COLAPSO CON EQUILIBRIO ESTATICO.
-TAMBIÉN ADAPTE SCRIPT DE SIMULADOR MASIVO A CSV PARA AGREGAR COLUMNA DE BANDERA DE COLAPSO INDETERMINADO O NO.
-DEBO CONTINUAR VERIFICANDO VISUALMENTE ESO.
-LA IDEA ES QUE UN SET DE SIMULACIONES SE EJECUTE MAS RAPIDO
+export_evolution = True
 
 initial_population = utils.random_population([0, 1], [rule.prob_defector, rule.prob_cooperator],
-                                             (rule.sides, rule.sides), seed=139)
-# initial_population = utils_population.cluster(sides=rule.sides, rows=3, cols=3)
+                                             (rule.sides, rule.sides), seed=0)
+# initial_population = utils_population.cluster(sides=rule.sides, rows=20, cols=3)
 # initial_population = utils_population.frente(sides=rule.sides, i=10, j=10)
-# initial_population = utils_population.cruz(sides=rule.sides, i=15, j=15)
+# initial_population = utils_population.cruz()
 # initial_population = utils_population.ele_original(sides=rule.sides, i=10, j=10, len_i=9, len_j=9)
 # initial_population = utils_population.ele()
 # initial_population = utils_population.custom()
@@ -60,16 +55,18 @@ if render_frequency_array:
     plot = utils_plotly.plot_frequency(data=plot_data, title=plot_title)
     plot.show()
 
-export_evolution = False
+
 if export_evolution:
     # guardar CSV de evolucion
     # Directorio de entrada: por defecto, el mismo donde está este script
     INPUT_DIR = Path(__file__).resolve().parent
     # Directorio de salida (se creará si no existe)
-    OUTPUT_DIR = INPUT_DIR / "evolution" / "prueba"
+
+    dir_name = f'{rule.sides}-{rule.factor}-{rule.tolerance}'
+    OUTPUT_DIR = INPUT_DIR / "evolution" / dir_name
 
     # Prefijo para los archivos generados (evita re-procesarlos)
     OUTPUT_PREFIX = "summary-"
 
-    fileprefix = "evo-"
-    utils_file.export_evolution_csv(pgg_result["matrix_list"], OUTPUT_DIR, fileprefix)
+    # fileprefix = "evo-"
+    utils_file.export_evolution_csv(pgg_result["matrix_list"], OUTPUT_DIR)
