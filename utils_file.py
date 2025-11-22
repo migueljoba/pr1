@@ -40,7 +40,7 @@ def export_csv(data, filename, directory: str = "./data_source", header=None):
     print(f"Archivo '{filename}' generado.")
 
 
-def export_evolution_csv(data, directory, fileprefix):
+def export_evolution_csv(data, directory, fileprefix=None):
     """
     Exporta cada ndarray de la lista 'data' a un archivo CSV separado.
     El nombre de cada archivo es: fileprefixXXX.csv donde XXX es el índice con 3 dígitos.
@@ -50,7 +50,7 @@ def export_evolution_csv(data, directory, fileprefix):
 
     for idx, arr in enumerate(data):
         # Formatea el índice a 3 dígitos con ceros a la izquierda
-        filename = f"{fileprefix}-gen-{idx:03d}.csv"
+        filename = f"{fileprefix}gen-{idx:03d}.csv" if fileprefix else f"{idx:03d}.csv"
         filepath = os.path.join(directory, filename)
         # Guarda el ndarray como CSV
         np.savetxt(filepath, arr, fmt='%d', delimiter=',')
