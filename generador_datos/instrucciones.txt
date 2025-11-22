@@ -49,3 +49,12 @@ Renderiza gráficos en el navegador
 
 # 5 Para verificar el contenido de las simulaciones
 check_simulations.py
+
+
+
+
+# EXTRA
+# Renderizar evolución de población a partir de archivos CSV.dir_csv_to_svg_v2.py
+# Primero se debe ejecutar tester_pgg.py para poder generar archivos CSV evolutivos
+# Luego se ejecuta script `dir_csv_to_svg_v2.py` para generar un SVG a partir de cada CSV
+

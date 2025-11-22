@@ -64,7 +64,7 @@ if export_evolution:
 
     dir_name = f'{rule.sides}-{rule.factor}-{rule.tolerance}'
     OUTPUT_DIR = INPUT_DIR / "evolution" / dir_name
-
+    print(f"Exporting evolution results to {OUTPUT_DIR}")
     # Prefijo para los archivos generados (evita re-procesarlos)
     OUTPUT_PREFIX = "summary-"
 
