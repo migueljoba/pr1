@@ -68,13 +68,13 @@ PREFIX_SUMMARY = "summary"  # configurable
 
 # Patrón completo con grupos nombrados
 PATTERN_PARSER_FILENAME = re.compile(
-    rf"^{PREFIX_SUMMARY}-"
+    rf"^(?:{PREFIX_SUMMARY}-)?"  # prefijo opcional
     r"dim(?P<dim>\d+)-"
     r"prob-d(?P<prob_d>\d\.\d)c(?P<prob_c>\d\.\d)-"
     r"radio(?P<radio>\d+)-"
     r"pay(?P<pay>\d+)-"
     r"factor(?P<factor>\d\.\d)-"
-    r"tol(?P<tol>\d{2})\.csv$"
+    r"tol(?P<tol>\d{2})\.(csv|pdf)$"
 )
 
 
