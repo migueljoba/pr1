@@ -1,22 +1,27 @@
 #!/usr/bin/env python3
 import csv
-from pathlib import Path
 import sys
+from pathlib import Path
+
+import constants as cons
 
 # ==============================
 # CONFIGURACIÓN EDITABLE
 # ==============================
 # Directorio que contiene los CSV de entrada
-sides = 40
+sides = 20
 seed = 0
-factor = 1.3
+factor = 1
 tolerance = 0
 dir_name = f'{sides}-{seed}-{factor}-{tolerance}'
 INPUT_DIR = f"../generador_datos/evolution/{dir_name}"
 
 # Directorio donde se guardarán los SVG generados.
 # Si es None, se usan los mismos directorios donde están los CSV.
-OUTPUT_DIR = INPUT_DIR + "/svg"
+# OUTPUT_DIR = INPUT_DIR + "/svg"
+
+
+OUTPUT_DIR = f"{cons.IMAGES_DIR}/images/evolution/{dir_name}"
 
 CELL_SIZE = 20  # tamaño de cada celda en píxeles
 COLOR0 = "#ff7f50"  # color para celdas con valor 0

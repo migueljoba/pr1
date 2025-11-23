@@ -5,6 +5,7 @@ import utils_file
 import utils_plotly
 import utils_population
 from rule import RulePgg
+import constants as cons
 
 # definir la regla de juego
 rule = RulePgg()
@@ -23,16 +24,18 @@ seed = 0
 
 # banderas de datos o graficos
 # exportar matrices de evolucion en formato CSV
-export_evolution = False
+export_evolution = True
+
+export_frequency_graph = True
 
 # matrices de evolucion
-render_evolution_array = True
+render_evolution_array = False
 
 # matrices de pago
 render_payment_array = False
 
 # grafico de frecuencia
-render_frequency_array = False
+render_frequency_array = True
 
 initial_population = utils.random_population([0, 1], [rule.prob_defector, rule.prob_cooperator],
                                              (rule.sides, rule.sides), seed=seed)
@@ -50,21 +53,37 @@ initial_population = utils.random_population([0, 1], [rule.prob_defector, rule.p
 # initial_population = np.array(file_data)
 
 
-if render_evolution_array:
-    pgg_result = utils.run_pgg(initial_population, rule, generations, stop_when_all=utils.VARIANTS_DEFECTOR)
+pgg_result = utils.run_pgg(initial_population, rule, generations, stop_when_all=utils.VARIANTS_DEFECTOR)
 
-# matrices de evolucion
-utils_plotly.imshow_animate(np.array(pgg_result['matrix_list']), title=f'Evolución - {rule} nuevo')
+plot_data = utils.resume_frequency_data(pgg_result['matrix_list'])
+
+if render_evolution_array:
+    # matrices de evolucion
+    utils_plotly.imshow_animate(np.array(pgg_result['matrix_list']), title=f'Evolución - {rule} nuevo')
 
 if render_payment_array:
     utils_plotly.imshow_animate(np.array(pgg_result['payoff_list']), title=f'Pagos - {rule} nuevo')
 
 if render_frequency_array:
-    plot_data = utils.resume_frequency_data(pgg_result['matrix_list'])
-
     plot_title = f"r: {rule.factor}, t:{rule.tolerance} dim: {initial_population.shape}, generations: {generations}"
     plot = utils_plotly.plot_frequency(data=plot_data, title=plot_title)
     plot.show()
+
+if export_frequency_graph:
+    INPUT_DIR = Path(__file__).resolve().parent
+    dir_name = f'{rule.sides}-{seed}-{rule.factor}-{rule.tolerance}'
+    OUTPUT_DIR = f"{cons.IMAGES_DIR}/evolution/{dir_name}"
+
+    utils_plotly.export_frequency_svg(
+        data=plot_data,
+        output_dir=OUTPUT_DIR,
+        filename="frecuencia",
+        title="Evolución de la frecuencia de cooperadores",
+        trace_color="#d62728",
+        background_color="#f7f7f7",
+        font_family="LMRoman10",
+        font_size=16
+    )
 
 if export_evolution:
     # guardar CSV de evolucion

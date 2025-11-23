@@ -20,9 +20,29 @@ colors_scale_4s = [
 def plot_frequency(data: list, title: str = None):
     labels = {
         "x": "generaciones",
-        "y": "cooperadores / total_poblacion"
+        "y": "cooperadores / total_poblacion",
     }
-    return px.line(y=data, range_y=[0, 1], title=title, labels=labels, template="plotly_white")
+
+    # Usamos índices enteros explícitos para el eje X
+    x_values = list(range(len(data)))
+
+    fig = px.line(
+        x=x_values,
+        y=data,
+        range_y=[0, 1],
+        title=title,
+        labels=labels,
+        template="plotly_white",
+    )
+
+    # Forzar ticks enteros en el eje X
+    fig.update_xaxes(
+        tickmode="linear",  # escala lineal
+        tick0=2,  # primer tick en 0
+        dtick=1  # separación de 1 en 1
+    )
+
+    return fig
 
 
 def plot_map(array, step=None, b=None, title: str = None, file_prefix=None, grid_data=False, format="png"):
@@ -126,3 +146,62 @@ def plot_histogram_from_csv(
         fig.write_html(out, include_plotlyjs="cdn")
 
     fig.show()
+
+
+def export_frequency_svg(
+        data: list,
+        output_dir: str,
+        filename: str,
+        title: str = None,
+        trace_color: str = "#1f77b4",  # color de línea / barras
+        background_color: str = "white",  # fondo del gráfico
+        font_family: str = "LMRoman10",  # fuente
+        font_size: int = 14
+) -> Path:
+    """
+    Genera el gráfico de frecuencia y lo exporta como SVG.
+
+    :param data: Datos para el eje Y.
+    :param output_dir: Directorio donde se guardará el SVG.
+    :param filename: Nombre de archivo (con o sin extensión .svg).
+    :param title: Título del gráfico (opcional).
+    :param trace_color: Color de la línea o barras.
+    :param background_color: Color de fondo (paper y plot).
+    :param font_family: Familia tipográfica a usar.
+    :param font_size: Tamaño de fuente en puntos.
+    :return: Ruta completa del archivo SVG generado.
+    """
+
+    # Crear la figura base
+    fig = plot_frequency(data, title=title)
+
+    # Estilo de la serie (línea o barras, según el tipo de fig)
+    fig.update_traces(
+        line=dict(color=trace_color),  # para line plots
+        marker=dict(color=trace_color)  # por si es scatter/bar con marker
+    )
+
+    # Estilo global (fondo, fuente)
+    fig.update_layout(
+        paper_bgcolor=background_color,
+        plot_bgcolor=background_color,
+        font=dict(
+            family=font_family,
+            size=font_size
+        )
+    )
+
+    # Normalizar directorio de salida
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Asegurar extensión .svg
+    if not filename.lower().endswith(".svg"):
+        filename = f"{filename}.svg"
+
+    out_path = out_dir / filename
+
+    # Exportar a SVG (requiere tener instalado "kaleido")
+    fig.write_image(str(out_path), format="svg")
+
+    return out_path
