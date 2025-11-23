@@ -8,9 +8,10 @@ import sys
 # ==============================
 # Directorio que contiene los CSV de entrada
 sides = 40
+seed = 0
 factor = 1.3
 tolerance = 0
-dir_name = f'{sides}-{factor}-{tolerance}'
+dir_name = f'{sides}-{seed}-{factor}-{tolerance}'
 INPUT_DIR = f"../generador_datos/evolution/{dir_name}"
 
 # Directorio donde se guardarán los SVG generados.
@@ -27,10 +28,10 @@ STROKE_WIDTH = 1  # ancho del borde (0.0 = sin borde)
 DELIMITER = ","  # delimitador del CSV ("," o ";" por ejemplo)
 
 # Área de texto inferior (etiqueta con el nombre del archivo CSV)
-LABEL_FONT_FAMILY = "monospace"           # fuente del texto
-LABEL_FONT_SIZE = 14                      # tamaño de fuente en px
-LABEL_MARGIN_LEFT = 5                     # margen desde el borde izquierdo
-LABEL_MARGIN_TOP = 5                      # separación entre la cuadrícula y el texto
+LABEL_FONT_FAMILY = "LMRoman10"  # "Latin Modern Roman", # fuente del texto
+LABEL_FONT_SIZE = CELL_SIZE  # tamaño de fuente en px
+LABEL_MARGIN_LEFT = 5  # margen desde el borde izquierdo
+LABEL_MARGIN_TOP = 5  # separación entre la cuadrícula y el texto
 
 
 def leer_csv(path_csv, delimiter=","):
@@ -61,13 +62,13 @@ def leer_csv(path_csv, delimiter=","):
 
 
 def generar_svg(
-    datos,
-    cell_size,
-    color0,
-    color1,
-    stroke_color,
-    stroke_width,
-    label_text: str,
+        datos,
+        cell_size,
+        color0,
+        color1,
+        stroke_color,
+        stroke_width,
+        label_text: str,
 ):
     filas = len(datos)
     cols = len(datos[0])
@@ -132,7 +133,10 @@ def procesar_csv(csv_path: Path, output_dir: Path):
         datos = leer_csv(csv_path, delimiter=DELIMITER)
 
         # Usamos el nombre del archivo (incluyendo .csv) como etiqueta
-        label_text = csv_path.stem
+        # label_text = csv_path.stem
+
+        # texto personalizado
+        label_text = f'Generación {int(csv_path.stem)}'
 
         svg_contenido = generar_svg(
             datos=datos,
