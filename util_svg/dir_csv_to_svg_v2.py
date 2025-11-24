@@ -9,10 +9,10 @@ import constants as cons
 # CONFIGURACIÓN EDITABLE
 # ==============================
 # Directorio que contiene los CSV de entrada
-sides = 20
-seed = 0
-factor = 1
-tolerance = 0
+sides = cons.EXPORTABLE_SIDES
+seed = cons.EXPORTABLE_SEED
+factor = cons.EXPORTABLE_FACTOR
+tolerance = cons.EXPORTABLE_TOLERANCE
 dir_name = f'{sides}-{seed}-{factor}-{tolerance}'
 INPUT_DIR = f"../generador_datos/evolution/{dir_name}"
 
@@ -21,13 +21,15 @@ INPUT_DIR = f"../generador_datos/evolution/{dir_name}"
 # OUTPUT_DIR = INPUT_DIR + "/svg"
 
 
-OUTPUT_DIR = f"{cons.IMAGES_DIR}/images/evolution/{dir_name}"
+OUTPUT_DIR = f"{cons.IMAGES_DIR}/evolution/{dir_name}"
 
 CELL_SIZE = 20  # tamaño de cada celda en píxeles
 COLOR0 = "#ff7f50"  # color para celdas con valor 0
 COLOR1 = "#4682b4"  # color para celdas con valor 1
 
-STROKE_COLOR = "#000000"  # color del borde de las celdas
+# color del borde de las celdas
+STROKE_COLOR = "#000000" if sides < 20 else None
+
 STROKE_WIDTH = 1  # ancho del borde (0.0 = sin borde)
 
 DELIMITER = ","  # delimitador del CSV ("," o ";" por ejemplo)
@@ -73,7 +75,7 @@ def generar_svg(
         color1,
         stroke_color,
         stroke_width,
-        label_text: str,
+        label_text: str = None,
 ):
     filas = len(datos)
     cols = len(datos[0])
@@ -120,14 +122,16 @@ def generar_svg(
     # Texto con el nombre del archivo CSV, debajo de la cuadrícula
     text_x = LABEL_MARGIN_LEFT
     text_y = grid_height + LABEL_MARGIN_TOP + LABEL_FONT_SIZE  # baseline del texto
-    svg_lineas.append(
-        f'  <text x="{text_x}" y="{text_y}" '
-        f'font-family="{LABEL_FONT_FAMILY}" '
-        f'font-size="{LABEL_FONT_SIZE}px" '
-        f'fill="#000000">'
-        f'{label_text}'
-        f'</text>'
-    )
+
+    if label_text is not None:
+        svg_lineas.append(
+            f'  <text x="{text_x}" y="{text_y}" '
+            f'font-family="{LABEL_FONT_FAMILY}" '
+            f'font-size="{LABEL_FONT_SIZE}px" '
+            f'fill="#000000">'
+            f'{label_text}'
+            f'</text>'
+        )
 
     svg_lineas.append("</svg>")
     return "\n".join(svg_lineas)

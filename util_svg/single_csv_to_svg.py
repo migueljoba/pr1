@@ -10,7 +10,7 @@ Genera un solo archivo SVG, a partir de un solo archivo CSV
 # ==============================
 # CONFIGURACIÓN EDITABLE
 # ==============================
-INPUT_CSV = "../data_source/rotator.csv"  # archivo CSV de entrada
+INPUT_CSV = "../data_source/base-dim3.csv"  # archivo CSV de entrada
 OUTPUT_SVG = None  # si es None, usa mismo nombre que el CSV con extensión .svg
 
 CELL_SIZE = 20  # tamaño de cada celda en píxeles
