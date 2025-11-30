@@ -2,6 +2,7 @@ import csv
 import os
 import re
 from pathlib import Path
+from typing import Iterable
 
 import numpy as np
 
@@ -57,8 +58,12 @@ def export_evolution_csv(data, directory, fileprefix=None):
         # Puedes usar fmt='%d' porque son solo 0 y 1
 
 
-def get_all_csv_files(dir: Path):
-    csv_files = sorted(p for p in dir.iterdir() if p.is_file() and p.suffix == '.csv')
+def get_all_csv_files(dir: Path, recursive: bool = False) -> Iterable[str]:
+    if recursive:
+        csv_files = sorted(p for p in dir.rglob("*.csv") if p.is_file())
+    else:
+        csv_files = sorted(p for p in dir.iterdir() if p.is_file() and p.suffix == '.csv')
+
     if not csv_files:
         raise FileNotFoundError(f"No se encontraron CSV en {dir}")
     return csv_files
