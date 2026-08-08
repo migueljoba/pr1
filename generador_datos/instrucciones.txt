@@ -36,9 +36,18 @@ value,count
 Ejemplo de archivo generado:
 generador_datos/histograms/summary-dim10-prob-d0.2c0.8-radio1-pay1-factor1.0-tol00.pdf
 
+# 3 - ALT - Gráficos PDF para histogramas
+# Genera histogramas mixtos para cada archivo desde datos de conjunto de simulaciones (paso 1)
+# sin tener que generar CSV resumido.
+>> generador_datos/plot-histograma-mixto00.py
+
+# 4 - Generar plantilla para renderizar en latex todos los archivos PDFs dentro de generador_datos/histograms/
+
+Ejemplo de archivo generado:
+generador_datos/latex/histogramas.tex
 
 
-# 4 - Conjunto de gráficos de resumen, tipo histograma
+# 5- Conjunto de gráficos de resumen, tipo histograma
 # Requiere de ejecución de #2.
 # Permite graficar en una sola vista una grilla de gráficos, especificando dim, factor y tol
 >> render_summaries.py

@@ -35,10 +35,11 @@ STROKE_WIDTH = 1  # ancho del borde (0.0 = sin borde)
 DELIMITER = ","  # delimitador del CSV ("," o ";" por ejemplo)
 
 # Área de texto inferior (etiqueta con el nombre del archivo CSV)
+ADD_LABEL_TEXT = False
 LABEL_FONT_FAMILY = "LMRoman10"  # "Latin Modern Roman", # fuente del texto
 LABEL_FONT_SIZE = CELL_SIZE  # tamaño de fuente en px
-LABEL_MARGIN_LEFT = 5  # margen desde el borde izquierdo
-LABEL_MARGIN_TOP = 5  # separación entre la cuadrícula y el texto
+LABEL_MARGIN_LEFT = 0  # margen desde el borde izquierdo
+LABEL_MARGIN_TOP = 0  # separación entre la cuadrícula y el texto
 
 
 def leer_csv(path_csv, delimiter=","):
@@ -84,7 +85,10 @@ def generar_svg(
     grid_height = filas * cell_size
 
     # Altura adicional para el texto inferior
-    label_area_height = LABEL_FONT_SIZE + LABEL_MARGIN_TOP + 5  # un pequeño margen extra
+    if label_text is not None:
+        label_area_height = LABEL_FONT_SIZE + LABEL_MARGIN_TOP + 5  # un pequeño margen extra
+    else:
+        label_area_height = 0
 
     width = grid_width
     height = grid_height + label_area_height
@@ -145,7 +149,7 @@ def procesar_csv(csv_path: Path, output_dir: Path):
         # label_text = csv_path.stem
 
         # texto personalizado
-        label_text = f'Generación {int(csv_path.stem)}'
+        label_text = f'Generación {int(csv_path.stem)}' if ADD_LABEL_TEXT else None
 
         svg_contenido = generar_svg(
             datos=datos,
@@ -160,6 +164,11 @@ def procesar_csv(csv_path: Path, output_dir: Path):
         output_path = output_dir / (csv_path.stem + ".svg")
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(svg_contenido)
+
+        # no se puede guardar directametne como PDF porque la matriz no fue generada
+        # por plotly
+
+        # fig.write_image(output_dir / (csv_path.stem + ".pdf"))
 
         print(f"[OK] {csv_path.name} -> {output_path}")
     except Exception as e:

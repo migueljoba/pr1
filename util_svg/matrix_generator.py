@@ -17,11 +17,11 @@ según el modo seleccionado:
 # ==============================
 
 # Dimensiones de la cuadrícula
-ROWS = 10  # número de filas
-COLS = 10  # número de columnas
+ROWS = 5  # número de filas
+COLS = 5  # número de columnas
 
 # Modos de contenido de texto
-MODE_ABSOLUTE = True  # True: escribe 0,1,2,3,... en cada celda
+MODE_ABSOLUTE = False  # True: escribe 0,1,2,3,... en cada celda
 MODE_INDEX = not MODE_ABSOLUTE  # True: escribe (i,j) en cada celda
 
 # Ruta de salida del SVG (obligatoria)

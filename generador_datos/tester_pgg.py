@@ -10,23 +10,23 @@ import constants as cons
 # definir la regla de juego
 rule = RulePgg()
 # rule.use_3s_transition()
-rule.sides = 20
 rule.population_prob(c=0.8, d=0.2)
+rule.sides = cons.EXPORTABLE_SIDES
 rule.radio = 1
 rule.pay = 1
-rule.factor = 1
-rule.tolerance = 0
+seed = cons.EXPORTABLE_SEED
+rule.factor = cons.EXPORTABLE_FACTOR
+rule.tolerance = cons.EXPORTABLE_TOLERANCE
 rule.border = False
 rule.stop_when_undetermined = True
 # numero de generaciones
 generations = 50
-seed = 0
 
 # banderas de datos o graficos
 # exportar matrices de evolucion en formato CSV
 export_evolution = True
 
-export_frequency_graph = True
+export_frequency_graph = False
 
 # matrices de evolucion
 render_evolution_array = False
@@ -35,7 +35,7 @@ render_evolution_array = False
 render_payment_array = False
 
 # grafico de frecuencia
-render_frequency_array = True
+render_frequency_array = False
 
 initial_population = utils.random_population([0, 1], [rule.prob_defector, rule.prob_cooperator],
                                              (rule.sides, rule.sides), seed=seed)
@@ -78,12 +78,14 @@ if export_frequency_graph:
         data=plot_data,
         output_dir=OUTPUT_DIR,
         filename="frecuencia",
-        title="Evolución de la frecuencia de cooperadores",
+        # title="Evolución de la frecuencia de cooperadores",
         trace_color="#d62728",
-        background_color="#f7f7f7",
+        # background_color="#f7f7f7",
         font_family="LMRoman10",
         font_size=16
     )
+
+    print(f"Exporting frequency grapth to {OUTPUT_DIR}")
 
 if export_evolution:
     # guardar CSV de evolucion

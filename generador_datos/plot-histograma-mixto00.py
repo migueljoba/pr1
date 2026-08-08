@@ -186,8 +186,8 @@ def render_plot(file_path: Path, summary_false: pd.DataFrame, summary_true: pd.D
     # Estética final
     # --------------------------------------------------------
     fig.update_xaxes(range=[0, x_max + 1])
-    # fig.update_yaxes(range=[0, 2000])
-    fig.update_yaxes(nticks=4)
+    fig.update_yaxes(range=[0, 2000])
+    fig.update_yaxes(nticks=5)
     # fig.update_yaxes(tick0=0, dtick=200)
 
     # Tipografía idéntica a tu script previo
@@ -202,8 +202,8 @@ def render_plot(file_path: Path, summary_false: pd.DataFrame, summary_true: pd.D
     )
 
     # Título (parseado a partir del filename original)
-    # title = f"{uf.parse_filename(file_path.name).get('str')}"
-    # fig.update_layout(title=title)
+    title = f"{uf.parse_filename(file_path.name).get('str')}"
+    fig.update_layout(title=title)
 
     # --------------------------------------------------------
     # Guardar PDF y SVG
@@ -238,7 +238,7 @@ def main():
     print("Gráfico basura generado ...")
 
     subdir_list = ["dim10", "dim20", "dim30", "dim40", "dim50", "dim60", "dim70", "dim80", "dim90", "dim100"]
-
+    subdir_list = ["dim10"]
     for subdir in subdir_list:
 
         csv_files = uf.get_all_csv_files(INPUT_DIR / subdir, recursive=False)
@@ -258,7 +258,7 @@ def main():
         global_x_max = compute_global_x_max(csv_files)
         print(f"Max X en {subdir}: {global_x_max}")
 
-        for file in []:
+        for file in csv_files:
             df = pd.read_csv(file)
             summary_false, summary_true = generate_two_summaries(df)
             render_plot(file, summary_false, summary_true, x_max=global_x_max)

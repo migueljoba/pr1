@@ -60,8 +60,8 @@ def run(rule: RulePgg, seeds: [int]) -> np.array:
 
 
 if __name__ == '__main__':
-    dimensiones = [90]
-    factores = [1.5]
+    dimensiones = [30]
+    factores = [1.0]
     seeds = [0, 2000]
     tolerancias_r = {
         "1.0": [0, 12, 23, 34, 45, 56, 67, 78, 89],
@@ -74,6 +74,10 @@ if __name__ == '__main__':
         "2.5": [0, 17, 45, 73],
         "3.0": [0, 34, 67],
         "3.5": [0, 23, 62]
+    }
+
+    tolerancias_r = {
+        "1.0": [0]
     }
 
     # INTENTAR ACOTAR VALORES DE R, PROPONIENDO UN VALOR R TAL QUE EL PAGO SEA CERO, CON EL PEOR ESCENARIO PARA UN COOPERADOR: NC=1

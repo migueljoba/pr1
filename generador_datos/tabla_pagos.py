@@ -4,7 +4,7 @@ import utils
 def run():
     contribution = 1
     population = 9
-    for f in utils.custom_range(1, 3, step=0.5):
+    for f in utils.custom_range(1, 2, step=0.1):
         print('-' * 20)
         for coop in range(1, 10):
             common = utils.payoff_pgg(
@@ -19,14 +19,8 @@ def run():
             # mi tolerancia debe ser 20% para mantener estrategia
             # si mi tolerancia es menor a 20%, cambio a desertor
 
-            # p > c * (1 - t /100)
-            # p > c - ct/100
-            # p - c > -ct/100
-            min_tol = - 100 * round((payoff - contribution) / contribution, 4)
-
-            # por formula
-            min_tol2 = round(2 - f * coop / population, 4)
-            result = f"factor: {f}, coop: {coop}, common: {round(common)}, payoff: {round(payoff, 4)}, tol: {min_tol}, formulation: {min_tol2}"
+            min_tol = round(1 - f * coop / population, 4)
+            result = f"factor: {f}, coop: {coop}, common: {round(common, 4)}, payoff: {round(payoff, 4)}, tol: {max(0, min_tol)}"
             print(result)
 
 
