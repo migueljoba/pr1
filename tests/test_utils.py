@@ -391,5 +391,115 @@ def test_compute_payoff_with_rule_pgg_when_defector():
     assert utils.compute_payoff_with_rule_pgg([[0, 0, 0], [0, 0, 0], [0, 0, 0]], rule) == pytest.approx(0)
 
 
+def _payoff_reference_toroidal(population, rule: RulePgg):
+    # implementacion celda-a-celda (previa a la vectorizacion) usada como oraculo
+    expected = np.empty(population.shape, dtype=float)
+    for idx_i, idx_j in np.ndindex(population.shape):
+        neighbours = utils.get_moore_neighbours(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
+        individual = population[idx_i, idx_j]
+        expected[idx_i, idx_j] = utils.compute_payoff_with_rule_pgg(neighbours, rule, individual)
+    return expected
+
+
+def _payoff_reference_clipped(population, rule: RulePgg):
+    expected = np.empty(population.shape, dtype=float)
+    for idx_i, idx_j in np.ndindex(population.shape):
+        neighbours = utils.get_moore_neighbours_clip(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
+        individual = population[idx_i, idx_j]
+        expected[idx_i, idx_j] = utils.compute_payoff_with_rule_pgg(neighbours, rule, individual)
+    return expected
+
+
+def test_generate_payoff_array_pgg_toroidal_matches_reference_blocks():
+    # reutiliza los bloques 3x3 ya validados en test_compute_payoff_with_rule_pgg_when_*:
+    # en una poblacion de 3x3 con radio=1, la vecindad toroidal de la celda central
+    # es exactamente el bloque completo, asi que el valor esperado en [1,1] es el mismo
+    rule = RulePgg()
+    rule.pay = 1
+    rule.tolerance = 0
+    rule.radio = 1
+    rule.factor = 1
+
+    population = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 0]])
+    payoff = utils.generate_payoff_array_pgg_toroidal(population, rule)
+    assert payoff[1, 1] == pytest.approx(-0.11111111111111116)
+
+    population = np.array([[1, 1, 1], [1, 0, 1], [1, 1, 0]])
+    payoff = utils.generate_payoff_array_pgg_toroidal(population, rule)
+    assert payoff[1, 1] == pytest.approx(0.7777777777777778)
+
+
+def test_generate_payoff_array_pgg_toroidal_equals_per_cell_reference():
+    for radio, factor, tolerance, seed in [(1, 1.2, 34, 0), (2, 2.0, 10, 1), (3, 0.7, 50, 2)]:
+        rule = RulePgg()
+        rule.pay = 1
+        rule.tolerance = tolerance
+        rule.radio = radio
+        rule.factor = factor
+        rule.border = False
+
+        population = utils.random_population([0, 1], [0.4, 0.6], (12, 12), seed=seed)
+
+        expected = _payoff_reference_toroidal(population, rule)
+        actual = utils.generate_payoff_array_pgg_toroidal(population, rule)
+
+        np.testing.assert_allclose(actual, expected)
+
+
+def test_generate_payoff_array_pgg_toroidal_requires_pay():
+    rule = RulePgg()
+    rule.pay = None
+    rule.tolerance = 34
+    rule.radio = 1
+
+    population = np.array([[1, 1], [1, 1]])
+    with pytest.raises(ValueError):
+        utils.generate_payoff_array_pgg_toroidal(population, rule)
+
+
+def test_generate_payoff_array_pgg_toroidal_requires_tolerance():
+    rule = RulePgg()
+    rule.pay = 1
+    rule.tolerance = None
+    rule.radio = 1
+
+    population = np.array([[1, 1], [1, 1]])
+    with pytest.raises(ValueError):
+        utils.generate_payoff_array_pgg_toroidal(population, rule)
+
+
+def test_generate_payoff_array_pgg_dispatches_to_toroidal_when_no_border():
+    rule = RulePgg()
+    rule.pay = 1
+    rule.tolerance = 34
+    rule.radio = 1
+    rule.factor = 1.5
+    rule.border = False
+
+    population = utils.random_population([0, 1], [0.3, 0.7], (10, 10), seed=7)
+
+    dispatched = utils.generate_payoff_array_pgg(population, rule)
+    direct = utils.generate_payoff_array_pgg_toroidal(population, rule)
+
+    np.testing.assert_array_equal(dispatched, direct)
+
+
+def test_generate_payoff_array_pgg_still_uses_per_cell_when_border():
+    # regresion: la rama border=True no debe verse afectada por la vectorizacion
+    rule = RulePgg()
+    rule.pay = 1
+    rule.tolerance = 34
+    rule.radio = 1
+    rule.factor = 1.5
+    rule.border = True
+
+    population = utils.random_population([0, 1], [0.3, 0.7], (6, 6), seed=3)
+
+    expected = _payoff_reference_clipped(population, rule)
+    actual = utils.generate_payoff_array_pgg(population, rule)
+
+    np.testing.assert_allclose(actual, expected)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -35,23 +35,53 @@ def generate_weight_array(population, rule: Rule):
 
 
 def generate_payoff_array_pgg(population, rule: RulePgg):
+    if not rule.border:
+        return generate_payoff_array_pgg_toroidal(population, rule)
+
     payoff_array = np.empty(population.shape, dtype=float)
 
     # % iterar sobre poblacion actual
     for idx_i, idx_j in np.ndindex(population.shape):
-        # obtener vecinos
-        # neighbours = get_neighbours(arrange=population, i=idx_i, j=idx_j) # se mantiene para verificar validez de vecindad de Moore con radio = 1
-
-        if rule.border:
-            neighbours = get_moore_neighbours_clip(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
-        else:
-            neighbours = get_moore_neighbours(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
+        neighbours = get_moore_neighbours_clip(arrange=population, i=idx_i, j=idx_j, r=rule.radio)
 
         # % calcular pago para el individuo
         individual = population[idx_i, idx_j]
         payoff_array[idx_i, idx_j] = compute_payoff_with_rule_pgg(neighbours, rule, individual)
 
     return payoff_array
+
+
+def generate_payoff_array_pgg_toroidal(population, rule: RulePgg):
+    """
+    Version vectorizada de generate_payoff_array_pgg para el caso border=False
+    (vecindad de Moore con bordes periodicos). Equivalente numericamente a
+    iterar celda por celda con get_moore_neighbours + compute_payoff_with_rule_pgg,
+    pero calcula toda la grilla con operaciones de NumPy en bloque en vez de
+    una llamada por celda.
+    """
+    if rule.pay is None:
+        raise ValueError("Rule must have pay. None given.")
+    if rule.tolerance is None:
+        raise ValueError("Rule must have tolerance. None given.")
+
+    r = rule.radio
+    t = (2 * r + 1) ** 2  # tamano de la vecindad de Moore, fijo al ser toroidal
+
+    coop_mask = np.isin(population, VARIANTS_COOPERATOR)
+
+    # total de cooperadores en la vecindad de cada celda: sumar la mascara
+    # desplazada (con wraparound) en cada offset relativo (di, dj), incluyendo (0, 0)
+    n = np.zeros(population.shape, dtype=int)
+    for di in range(-r, r + 1):
+        for dj in range(-r, r + 1):
+            n += np.roll(np.roll(coop_mask, -di, axis=0), -dj, axis=1)
+
+    # equivalente vectorizado de payoff_pgg(contribution=rule.pay, factor=rule.factor,
+    # total_coop=n, population=t); payoff_pgg no admite `total_coop` como array porque
+    # su validacion usa una comparacion encadenada (0 <= total_coop <= population)
+    common_pay = (rule.factor / t) * n * rule.pay
+
+    return np.where(coop_mask, common_pay - rule.pay, common_pay)
 
 
 def get_neighbours_idx_i(i: int, rows):
